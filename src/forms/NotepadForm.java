@@ -43,11 +43,11 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_insertCode = new javax.swing.JButton();
         btn_insertImage = new javax.swing.JButton();
         panel_file = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        mainScrollPane = new javax.swing.JScrollPane();
+        btn_openFile = new javax.swing.JButton();
+        btn_saveFile = new javax.swing.JButton();
+        btn_newFile = new javax.swing.JButton();
+        btn_print = new javax.swing.JButton();
+        mainLayeredPane = new javax.swing.JLayeredPane();
         mainTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -125,6 +125,11 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTabbedPane.addTab("Home", panel_home);
 
         btn_insertCode.setText("Código");
+        btn_insertCode.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_insertCodeActionPerformed(evt);
+            }
+        });
 
         btn_insertImage.setText("Imagem");
 
@@ -151,13 +156,13 @@ public class NotepadForm extends javax.swing.JFrame {
 
         mainTabbedPane.addTab("Inserir", panel_insert);
 
-        jButton1.setText("Abrir");
+        btn_openFile.setText("Abrir");
 
-        jButton2.setText("Salvar");
+        btn_saveFile.setText("Salvar");
 
-        jButton3.setText("Novo");
+        btn_newFile.setText("Novo");
 
-        jButton4.setText("Imprimir");
+        btn_print.setText("Imprimir");
 
         javax.swing.GroupLayout panel_fileLayout = new javax.swing.GroupLayout(panel_file);
         panel_file.setLayout(panel_fileLayout);
@@ -165,13 +170,13 @@ public class NotepadForm extends javax.swing.JFrame {
             panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_fileLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton1)
+                .addComponent(btn_openFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2)
+                .addComponent(btn_saveFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(btn_newFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(btn_print)
                 .addContainerGap(373, Short.MAX_VALUE))
         );
         panel_fileLayout.setVerticalGroup(
@@ -179,10 +184,10 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(panel_fileLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(btn_openFile)
+                    .addComponent(btn_saveFile)
+                    .addComponent(btn_newFile)
+                    .addComponent(btn_print))
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
@@ -190,19 +195,29 @@ public class NotepadForm extends javax.swing.JFrame {
 
         mainTextArea.setColumns(20);
         mainTextArea.setRows(5);
-        mainScrollPane.setViewportView(mainTextArea);
+
+        mainLayeredPane.setLayer(mainTextArea, -10);
+
+        javax.swing.GroupLayout mainLayeredPaneLayout = new javax.swing.GroupLayout(mainLayeredPane);
+        mainLayeredPane.setLayout(mainLayeredPaneLayout);
+        mainLayeredPaneLayout.setHorizontalGroup(
+            mainLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainTextArea)
+        );
+        mainLayeredPaneLayout.setVerticalGroup(
+            mainLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(mainTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(mainScrollPane))
-                    .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(mainLayeredPane)
+                    .addComponent(mainTabbedPane))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -210,13 +225,18 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(mainLayeredPane)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_insertCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertCodeActionPerformed
+        // TODO add your handling code here:
+        mainLayeredPane.add(CodeArea.createArea());
+    }//GEN-LAST:event_btn_insertCodeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -247,19 +267,19 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_bgColor;
     private javax.swing.JButton btn_insertCode;
     private javax.swing.JButton btn_insertImage;
+    private javax.swing.JButton btn_newFile;
+    private javax.swing.JButton btn_openFile;
+    private javax.swing.JButton btn_print;
+    private javax.swing.JButton btn_saveFile;
     private javax.swing.JButton btn_textColor;
     private javax.swing.JCheckBox checkBox_bold;
     private javax.swing.JCheckBox checkBox_italic;
     private javax.swing.JCheckBox checkBox_underlined;
     private javax.swing.JComboBox<String> comboBox_font;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel label_bgColor;
     private javax.swing.JLabel label_font;
     private javax.swing.JLabel label_textColor;
-    private javax.swing.JScrollPane mainScrollPane;
+    private javax.swing.JLayeredPane mainLayeredPane;
     private javax.swing.JTabbedPane mainTabbedPane;
     private javax.swing.JTextArea mainTextArea;
     private javax.swing.JPanel panel_file;
