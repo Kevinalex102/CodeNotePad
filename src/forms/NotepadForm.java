@@ -17,6 +17,7 @@ public class NotepadForm extends javax.swing.JFrame {
      */
     public NotepadForm() {
         initComponents();
+        editorPane.setBackgroundComponent(mainTextArea);
     }
 
     /**
@@ -47,7 +48,7 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_saveFile = new javax.swing.JButton();
         btn_newFile = new javax.swing.JButton();
         btn_print = new javax.swing.JButton();
-        mainLayeredPane = new javax.swing.JLayeredPane();
+        editorPane = new forms.EditorPane();
         mainTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -195,19 +196,8 @@ public class NotepadForm extends javax.swing.JFrame {
 
         mainTextArea.setColumns(20);
         mainTextArea.setRows(5);
-
-        mainLayeredPane.setLayer(mainTextArea, -10);
-
-        javax.swing.GroupLayout mainLayeredPaneLayout = new javax.swing.GroupLayout(mainLayeredPane);
-        mainLayeredPane.setLayout(mainLayeredPaneLayout);
-        mainLayeredPaneLayout.setHorizontalGroup(
-            mainLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainTextArea)
-        );
-        mainLayeredPaneLayout.setVerticalGroup(
-            mainLayeredPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainTextArea, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
-        );
+        editorPane.add(mainTextArea);
+        mainTextArea.setBounds(0, 0, 690, 480);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -216,7 +206,7 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(mainLayeredPane)
+                    .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(mainTabbedPane))
                 .addContainerGap())
         );
@@ -225,8 +215,8 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(mainLayeredPane)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -235,7 +225,7 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_insertCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertCodeActionPerformed
         // TODO add your handling code here:
-        mainLayeredPane.add(CodeArea.createArea());
+        editorPane.addComponent(CodeArea.createArea());
     }//GEN-LAST:event_btn_insertCodeActionPerformed
 
     /**
@@ -276,10 +266,10 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkBox_italic;
     private javax.swing.JCheckBox checkBox_underlined;
     private javax.swing.JComboBox<String> comboBox_font;
+    private forms.EditorPane editorPane;
     private javax.swing.JLabel label_bgColor;
     private javax.swing.JLabel label_font;
     private javax.swing.JLabel label_textColor;
-    private javax.swing.JLayeredPane mainLayeredPane;
     private javax.swing.JTabbedPane mainTabbedPane;
     private javax.swing.JTextArea mainTextArea;
     private javax.swing.JPanel panel_file;
