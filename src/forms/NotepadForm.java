@@ -4,6 +4,9 @@
  */
 package forms;
 
+import java.awt.*;
+import javax.swing.*;
+
 /**
  *
  * @author kevin
@@ -32,7 +35,6 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTabbedPane = new javax.swing.JTabbedPane();
         panel_home = new javax.swing.JPanel();
         checkBox_bold = new javax.swing.JCheckBox();
-        checkBox_underlined = new javax.swing.JCheckBox();
         checkBox_italic = new javax.swing.JCheckBox();
         comboBox_font = new javax.swing.JComboBox<>();
         label_font = new javax.swing.JLabel();
@@ -55,10 +57,18 @@ public class NotepadForm extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(400, 400));
 
         checkBox_bold.setText("Negrito");
-
-        checkBox_underlined.setText("Sublinhado");
+        checkBox_bold.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBox_boldActionPerformed(evt);
+            }
+        });
 
         checkBox_italic.setText("Itálico");
+        checkBox_italic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                checkBox_italicActionPerformed(evt);
+            }
+        });
 
         comboBox_font.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Arial", "Arial black", "Calibri", "Comic Sans", "Times New Roman" }));
 
@@ -68,11 +78,21 @@ public class NotepadForm extends javax.swing.JFrame {
 
         btn_textColor.setBackground(new java.awt.Color(0, 0, 0));
         btn_textColor.setForeground(new java.awt.Color(60, 63, 65));
+        btn_textColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_textColorActionPerformed(evt);
+            }
+        });
 
         label_bgColor.setText("Cor do Fundo");
 
         btn_bgColor.setBackground(new java.awt.Color(255, 255, 255));
         btn_bgColor.setForeground(new java.awt.Color(60, 63, 65));
+        btn_bgColor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_bgColorActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_homeLayout = new javax.swing.GroupLayout(panel_home);
         panel_home.setLayout(panel_homeLayout);
@@ -82,44 +102,46 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(panel_homeLayout.createSequentialGroup()
-                        .addComponent(checkBox_bold)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkBox_underlined)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkBox_italic))
-                    .addGroup(panel_homeLayout.createSequentialGroup()
                         .addComponent(label_font)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboBox_font, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel_homeLayout.createSequentialGroup()
-                        .addComponent(label_textColor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(label_bgColor)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(470, Short.MAX_VALUE))
+                        .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(panel_homeLayout.createSequentialGroup()
+                                .addComponent(label_textColor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(checkBox_italic))
+                        .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panel_homeLayout.createSequentialGroup()
+                                .addGap(30, 30, 30)
+                                .addComponent(label_bgColor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panel_homeLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(checkBox_bold)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
+                .addContainerGap(462, Short.MAX_VALUE))
         );
         panel_homeLayout.setVerticalGroup(
             panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_homeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(checkBox_bold)
-                    .addComponent(checkBox_underlined)
-                    .addComponent(checkBox_italic))
-                .addGap(7, 7, 7)
-                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label_font))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(8, 8, 8)
+                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(label_textColor)
-                        .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(label_bgColor)
-                    .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(label_bgColor)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(checkBox_bold)
+                    .addComponent(checkBox_italic))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -228,6 +250,63 @@ public class NotepadForm extends javax.swing.JFrame {
         editorPane.addComponent(CodeArea.createArea());
     }//GEN-LAST:event_btn_insertCodeActionPerformed
 
+    private void checkBox_boldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_boldActionPerformed
+        // TODO add your handling code here:
+        
+        Font currFont = mainTextArea.getFont();
+        if (currFont.isBold()){
+            if(currFont.isItalic()){
+                mainTextArea.setFont(currFont.deriveFont(Font.ITALIC));
+            }
+            else{
+                mainTextArea.setFont(currFont.deriveFont(Font.PLAIN));    
+            }
+        }
+        else if(currFont.isItalic()){
+            mainTextArea.setFont(currFont.deriveFont(Font.ITALIC + Font.BOLD));
+        }
+        else{
+            mainTextArea.setFont(currFont.deriveFont(Font.BOLD));
+        }
+    }//GEN-LAST:event_checkBox_boldActionPerformed
+
+    private void checkBox_italicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_italicActionPerformed
+        // TODO add your handling code here:
+        Font currFont = mainTextArea.getFont();
+        if (currFont.isBold()){
+            if(currFont.isItalic()){
+                mainTextArea.setFont(currFont.deriveFont(Font.BOLD));
+            }
+            else{
+                mainTextArea.setFont(currFont.deriveFont(Font.ITALIC + Font.BOLD));    
+            }
+        }
+        else if(currFont.isItalic()){
+            mainTextArea.setFont(currFont.deriveFont(Font.PLAIN));
+        }
+        else{
+            mainTextArea.setFont(currFont.deriveFont(Font.ITALIC));
+        }
+    }//GEN-LAST:event_checkBox_italicActionPerformed
+
+    private void btn_textColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_textColorActionPerformed
+        // TODO add your handling code here:
+        Color newColor = (pickAColor(mainTextArea.getForeground()));
+        mainTextArea.setForeground(newColor);
+        btn_textColor.setBackground(newColor);
+    }//GEN-LAST:event_btn_textColorActionPerformed
+
+    private void btn_bgColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bgColorActionPerformed
+        // TODO add your handling code here:
+        Color newColor = (pickAColor(mainTextArea.getBackground()));
+        mainTextArea.setBackground(newColor);
+        btn_bgColor.setBackground(newColor);
+    }//GEN-LAST:event_btn_bgColorActionPerformed
+    
+    public Color pickAColor(Color oldColor){
+        JColorChooser colorPicker = new JColorChooser();
+        return(JColorChooser.showDialog(colorPicker, "Escolha a nova cor:", oldColor));
+    }
     /**
      * @param args the command line arguments
      */
@@ -264,7 +343,6 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_textColor;
     private javax.swing.JCheckBox checkBox_bold;
     private javax.swing.JCheckBox checkBox_italic;
-    private javax.swing.JCheckBox checkBox_underlined;
     private javax.swing.JComboBox<String> comboBox_font;
     private forms.EditorPane editorPane;
     private javax.swing.JLabel label_bgColor;

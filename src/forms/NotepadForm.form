@@ -68,29 +68,36 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="checkBox_bold" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="checkBox_underlined" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="checkBox_italic" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
                               <Component id="label_font" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="comboBox_font" max="32767" attributes="0"/>
+                              <Component id="comboBox_font" min="-2" pref="177" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" attributes="0">
-                              <Component id="label_textColor" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_textColor" min="-2" pref="16" max="-2" attributes="0"/>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Component id="label_bgColor" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Component id="label_textColor" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                      <Component id="btn_textColor" min="-2" pref="16" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Component id="checkBox_italic" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                                      <Component id="label_bgColor" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="checkBox_bold" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="470" max="32767" attributes="0"/>
+                      <EmptySpace pref="462" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -99,23 +106,22 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="checkBox_bold" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="checkBox_underlined" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="checkBox_italic" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="comboBox_font" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="label_font" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="-2" pref="8" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Component id="btn_textColor" min="-2" pref="16" max="-2" attributes="0"/>
+                          <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="label_textColor" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="btn_textColor" alignment="3" min="-2" pref="16" max="-2" attributes="0"/>
+                              <Component id="label_bgColor" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="label_bgColor" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="checkBox_bold" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="checkBox_italic" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -127,16 +133,17 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Negrito"/>
               </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="checkBox_underlined">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Sublinhado"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkBox_boldActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JCheckBox" name="checkBox_italic">
               <Properties>
                 <Property name="text" type="java.lang.String" value="It&#xe1;lico"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkBox_italicActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JComboBox" name="comboBox_font">
               <Properties>
@@ -173,6 +180,9 @@
                   <Color blue="41" green="3f" red="3c" type="rgb"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_textColorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="label_bgColor">
               <Properties>
@@ -188,6 +198,9 @@
                   <Color blue="41" green="3f" red="3c" type="rgb"/>
                 </Property>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_bgColorActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
