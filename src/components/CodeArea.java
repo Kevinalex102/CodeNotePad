@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package forms;
+package components;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -19,6 +19,8 @@ public class CodeArea extends JTextArea{
     
     private static int idCounter = 0;
     private int id;
+    
+    //public int pos_x, pos_y, size; necessários para permanência de dados no futuro
     
     private static HashMap<Integer, CodeArea> codeAreas = new HashMap<Integer, CodeArea>();
     
@@ -118,11 +120,12 @@ public class CodeArea extends JTextArea{
             }
         };
         return mouseHandler;
-    }    
+    }
 
     private void deleteArea() {
         codeAreas.remove(this.id);
         EditorPane parent = (EditorPane) this.getParent();
         parent.removeComponent(this);
     }
+
 }

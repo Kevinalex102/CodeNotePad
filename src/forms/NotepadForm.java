@@ -4,6 +4,7 @@
  */
 package forms;
 
+import components.*;
 import java.awt.*;
 import javax.swing.*;
 
@@ -50,7 +51,7 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_saveFile = new javax.swing.JButton();
         btn_newFile = new javax.swing.JButton();
         btn_print = new javax.swing.JButton();
-        editorPane = new forms.EditorPane();
+        editorPane = new components.EditorPane();
         mainTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -122,7 +123,7 @@ public class NotepadForm extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(checkBox_bold)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(462, Short.MAX_VALUE))
+                .addContainerGap(489, Short.MAX_VALUE))
         );
         panel_homeLayout.setVerticalGroup(
             panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -165,7 +166,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_insertCode)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_insertImage)
-                .addContainerGap(525, Short.MAX_VALUE))
+                .addContainerGap(552, Short.MAX_VALUE))
         );
         panel_insertLayout.setVerticalGroup(
             panel_insertLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -200,7 +201,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_newFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_print)
-                .addContainerGap(373, Short.MAX_VALUE))
+                .addContainerGap(400, Short.MAX_VALUE))
         );
         panel_fileLayout.setVerticalGroup(
             panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -219,17 +220,17 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTextArea.setColumns(20);
         mainTextArea.setRows(5);
         editorPane.add(mainTextArea);
-        mainTextArea.setBounds(0, 0, 690, 480);
+        mainTextArea.setBounds(0, 0, 820, 750);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(mainTabbedPane))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                    .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -237,8 +238,8 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, 482, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -344,7 +345,7 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkBox_bold;
     private javax.swing.JCheckBox checkBox_italic;
     private javax.swing.JComboBox<String> comboBox_font;
-    private forms.EditorPane editorPane;
+    private components.EditorPane editorPane;
     private javax.swing.JLabel label_bgColor;
     private javax.swing.JLabel label_font;
     private javax.swing.JLabel label_textColor;
