@@ -19,6 +19,7 @@ public class CodeArea extends JTextArea{
     
     private static int idCounter = 0;
     private int id;
+    private boolean isLocked = false;
     
     //public int pos_x, pos_y, size; necessários para permanência de dados no futuro
     
@@ -59,15 +60,17 @@ public class CodeArea extends JTextArea{
         JMenuItem changeBackground = new JMenuItem("Mudar cor do fundo");
         JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
         JMenuItem delete = new JMenuItem("Excluir janela");
+        JToggleButton lock = new JToggleButton("Travar janela");
         JMenuItem export = new JMenuItem("Exportar para...");
         
         select.addActionListener(e -> codeArea.selectAll());
         cut.addActionListener(e -> codeArea.cut());
         copy.addActionListener(e -> codeArea.copy());
         paste.addActionListener(e -> codeArea.paste());
-        //changeBackground.addActionListener(e -> ChangeBackground());
-        //changeForeground.addActionListener(e -> ChangeForeground());
+        changeBackground.addActionListener(e -> ChangeBackground());
+        changeForeground.addActionListener(e -> ChangeForeground());
         delete.addActionListener(e -> deleteArea());
+        lock.addActionListener(e -> lockArea());
         //export.addActionListener(e -> Export());
         
         menu.add(select);
@@ -79,6 +82,7 @@ public class CodeArea extends JTextArea{
         menu.add(changeForeground);
         menu.addSeparator();
         menu.add(delete);
+        menu.add(lock);
         menu.add(export);
     }
     
@@ -97,7 +101,7 @@ public class CodeArea extends JTextArea{
 
             @Override
             public void mouseDragged(MouseEvent e) {
-                if (mouseOffset == null) {
+                if (mouseOffset == null || isLocked) {
                     return;
                 }
 
@@ -122,10 +126,22 @@ public class CodeArea extends JTextArea{
         return mouseHandler;
     }
 
+    private void ChangeBackground() {
+        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
+    }
+
+    private void ChangeForeground() {
+        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
+    }
+    
     private void deleteArea() {
         codeAreas.remove(this.id);
         EditorPane parent = (EditorPane) this.getParent();
         parent.removeComponent(this);
     }
 
+    private void lockArea() {
+        if(isLocked) isLocked = false;
+        else isLocked = true;
+    }
 }

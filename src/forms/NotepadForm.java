@@ -292,22 +292,18 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_textColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_textColorActionPerformed
         // TODO add your handling code here:
-        Color newColor = (pickAColor(mainTextArea.getForeground()));
+        Color newColor = (ColorPicker.pickAColor(mainTextArea.getForeground()));
         mainTextArea.setForeground(newColor);
         btn_textColor.setBackground(newColor);
     }//GEN-LAST:event_btn_textColorActionPerformed
 
     private void btn_bgColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bgColorActionPerformed
         // TODO add your handling code here:
-        Color newColor = (pickAColor(mainTextArea.getBackground()));
+        Color newColor = (ColorPicker.pickAColor(mainTextArea.getBackground()));
         mainTextArea.setBackground(newColor);
         btn_bgColor.setBackground(newColor);
     }//GEN-LAST:event_btn_bgColorActionPerformed
     
-    public Color pickAColor(Color oldColor){
-        JColorChooser colorPicker = new JColorChooser();
-        return(JColorChooser.showDialog(colorPicker, "Escolha a nova cor:", oldColor));
-    }
     /**
      * @param args the command line arguments
      */
