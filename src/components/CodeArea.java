@@ -4,6 +4,7 @@
  */
 package components;
 
+import filehandling.CodeFile;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
@@ -19,6 +20,7 @@ public class CodeArea extends JTextArea{
     
     private static int idCounter = 0;
     private int id;
+    private CodeFile textFile = null;
     private boolean isLocked = false;
     
     //public int pos_x, pos_y, size; necessários para permanência de dados no futuro
@@ -61,7 +63,13 @@ public class CodeArea extends JTextArea{
         JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
         JMenuItem delete = new JMenuItem("Excluir janela");
         JToggleButton lock = new JToggleButton("Travar janela");
-        JMenuItem export = new JMenuItem("Exportar para...");
+        JMenu exportMenu = new JMenu("Exportar para...");
+        JMenuItem exportTxt = new JMenuItem(".txt");
+        JMenuItem exportJar = new JMenuItem(".java");
+        JMenuItem exportCs = new JMenuItem(".cs");
+        JMenuItem exportJs = new JMenuItem(".js");
+        JMenuItem exportHtml = new JMenuItem(".html");
+        JMenuItem exportCss = new JMenuItem(".css");
         
         select.addActionListener(e -> codeArea.selectAll());
         cut.addActionListener(e -> codeArea.cut());
@@ -71,8 +79,20 @@ public class CodeArea extends JTextArea{
         changeForeground.addActionListener(e -> ChangeForeground());
         delete.addActionListener(e -> deleteArea());
         lock.addActionListener(e -> lockArea());
-        //export.addActionListener(e -> Export());
-        
+        exportTxt.addActionListener(e -> export(".txt"));
+        exportJar.addActionListener(e -> export(".java"));
+        exportCs.addActionListener(e -> export(".cs"));
+        exportJs.addActionListener(e -> export(".js"));
+        exportHtml.addActionListener(e -> export(".html"));
+        exportCss.addActionListener(e -> export(".cs"));
+
+        exportMenu.add(exportTxt);
+        exportMenu.addSeparator();
+        exportMenu.add(exportJar);
+        exportMenu.add(exportCs);
+        exportMenu.add(exportJs);
+        exportMenu.add(exportHtml);
+        exportMenu.add(exportCss);
         menu.add(select);
         menu.add(cut);
         menu.add(copy);
@@ -83,7 +103,7 @@ public class CodeArea extends JTextArea{
         menu.addSeparator();
         menu.add(delete);
         menu.add(lock);
-        menu.add(export);
+        menu.add(exportMenu);
     }
     
     private MouseAdapter addMouseHandler()
@@ -143,5 +163,16 @@ public class CodeArea extends JTextArea{
     private void lockArea() {
         if(isLocked) isLocked = false;
         else isLocked = true;
+    }
+
+    private void export(String type) {
+        
+        if (textFile == null){
+            textFile = new CodeFile(this.getText(), this.id, type);
+        }
+        else{
+            textFile.write(this.getText());
+        }
+        textFile.openWith();
     }
 }

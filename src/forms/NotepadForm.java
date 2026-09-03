@@ -4,9 +4,9 @@
  */
 package forms;
 
+import filehandling.CodeFile;
 import components.*;
 import java.awt.*;
-import javax.swing.*;
 
 /**
  *
@@ -56,6 +56,11 @@ public class NotepadForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(400, 400));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         checkBox_bold.setText("Negrito");
         checkBox_bold.addActionListener(new java.awt.event.ActionListener() {
@@ -303,6 +308,11 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTextArea.setBackground(newColor);
         btn_bgColor.setBackground(newColor);
     }//GEN-LAST:event_btn_bgColorActionPerformed
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        CodeFile.clearCache();
+    }//GEN-LAST:event_formWindowClosing
     
     /**
      * @param args the command line arguments
