@@ -21,16 +21,16 @@ public class CodeArea extends JTextArea{
     private static int idCounter = 0;
     private int id;
     private CodeFile textFile = null;
-    private boolean isLocked = false;
+    private boolean isLocked, resizing = false;
     
-    //public int pos_x, pos_y, size; necessários para permanência de dados no futuro
+    private int pos_x, pos_y, height, width;
     
     private static HashMap<Integer, CodeArea> codeAreas = new HashMap<Integer, CodeArea>();
     
     private Point mouseOffset;
     private final JPopupMenu menu = new JPopupMenu();
 
-    public CodeArea(){
+    private CodeArea(){
         super(10, 10);
         
         this.id = idCounter;
@@ -40,7 +40,6 @@ public class CodeArea extends JTextArea{
         MouseAdapter mouseHandler = addMouseHandler();
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
-        
         codeAreas.put(this.id, this);
     }
     
@@ -48,10 +47,53 @@ public class CodeArea extends JTextArea{
         CodeArea newCodeArea = new CodeArea();
         
         newCodeArea.setBounds(100, 100, 250, 100);
+        newCodeArea.width = 250;
+        newCodeArea.height = 100;
         newCodeArea.setBackground(Color.gray);
         newCodeArea.setForeground(Color.white);
         
         return newCodeArea;
+    }
+
+    private void ChangeBackground() {
+        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
+    }
+
+    private void ChangeForeground() {
+        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
+    }
+    
+    private void deleteArea() {
+        codeAreas.remove(this.id);
+        EditorPane parent = (EditorPane) this.getParent();
+        parent.removeComponent(this);
+    }
+
+    private void lockArea() {
+        if(isLocked) isLocked = false;
+        else isLocked = true;
+    }
+
+    private void export(String type) {
+        
+        if (textFile == null){
+            textFile = new CodeFile(this.getText(), this.id, type);
+        }
+        else{
+            textFile.write(this.getText());
+        }
+        textFile.openWith();
+    }
+    
+    @Override
+    public void resize(int newWidth, int newHeight){
+        width = newWidth;
+        height = newHeight;
+        
+        this.setBounds(pos_x, pos_y, newWidth, newHeight);
+        
+        revalidate();
+        repaint();
     }
     
     private void initializeMenu(CodeArea codeArea){
@@ -106,14 +148,16 @@ public class CodeArea extends JTextArea{
         menu.add(exportMenu);
     }
     
-    private MouseAdapter addMouseHandler()
-    {
+    private MouseAdapter addMouseHandler(){
         MouseAdapter mouseHandler = new MouseAdapter() {
 
             @Override
             public void mousePressed(MouseEvent e) {
                 if (SwingUtilities.isLeftMouseButton(e)) { 
                     mouseOffset = e.getPoint();
+                
+                    resizing = mouseOffset.x > width - 10 && mouseOffset.y > height - 10;
+                    
                 } else if (SwingUtilities.isRightMouseButton(e)) {
                     menu.show(CodeArea.this, e.getX(), e.getY());
                 }
@@ -124,18 +168,34 @@ public class CodeArea extends JTextArea{
                 if (mouseOffset == null || isLocked) {
                     return;
                 }
-
                 // Mouse relative to the container
                 Point parentPoint = SwingUtilities.convertPoint(
                     CodeArea.this,
                     e.getPoint(),
                     getParent()
                 );
-
-                int x = parentPoint.x - mouseOffset.x;
-                int y = parentPoint.y - mouseOffset.y;
-
-                setLocation(x, y);
+                
+                if (resizing){
+                    int newWidth = parentPoint.x - getX();
+                    int newHeight = parentPoint.y - getY();
+                    
+                    newWidth = Math.max(newWidth, 50);
+                    newHeight = Math.max(newHeight, 50);
+                    
+                    resize(newWidth, newHeight);
+                }
+                
+                else{
+                    int x = parentPoint.x - mouseOffset.x;
+                    int y = parentPoint.y - mouseOffset.y;
+                
+                    // Prevents going out of bounds
+                    if(x >= 0 && y >= 0){
+                        pos_x = x;
+                        pos_y = y;
+                        setLocation(x, y);
+                    } 
+                }
             }
 
             @Override
@@ -144,35 +204,5 @@ public class CodeArea extends JTextArea{
             }
         };
         return mouseHandler;
-    }
-
-    private void ChangeBackground() {
-        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
-    }
-
-    private void ChangeForeground() {
-        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
-    }
-    
-    private void deleteArea() {
-        codeAreas.remove(this.id);
-        EditorPane parent = (EditorPane) this.getParent();
-        parent.removeComponent(this);
-    }
-
-    private void lockArea() {
-        if(isLocked) isLocked = false;
-        else isLocked = true;
-    }
-
-    private void export(String type) {
-        
-        if (textFile == null){
-            textFile = new CodeFile(this.getText(), this.id, type);
-        }
-        else{
-            textFile.write(this.getText());
-        }
-        textFile.openWith();
     }
 }
