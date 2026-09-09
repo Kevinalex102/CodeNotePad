@@ -6,9 +6,10 @@ package components;
 
 import filehandling.CodeFile;
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import handlers.*;
+import actions.*;
+import menus.*;
 import java.util.HashMap;
 import javax.swing.*;
 
@@ -16,31 +17,44 @@ import javax.swing.*;
  *
  * @author kevin
  */
-public class CodeArea extends JTextArea{
+public class CodeArea extends JTextArea implements IDragResizeMouseHandler, ComponentActions, ExportActions{
     
     private static int idCounter = 0;
     private int id;
     private CodeFile textFile = null;
-    private boolean isLocked, resizing = false;
+    private boolean isLocked = false;
     
     private int pos_x, pos_y, height, width;
     
     private static HashMap<Integer, CodeArea> codeAreas = new HashMap<Integer, CodeArea>();
     
-    private Point mouseOffset;
-    private final JPopupMenu menu = new JPopupMenu();
+    private final ComponentPopupMenu menu;
 
     private CodeArea(){
         super(10, 10);
         
         this.id = idCounter;
         idCounter++;
-        
-        initializeMenu(this);
-        MouseAdapter mouseHandler = addMouseHandler();
+        menu = new ComponentPopupMenu(this);
+        initializeMenu();
+        MouseAdapter mouseHandler = new DragResizeMouseHandler(this, this);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
         codeAreas.put(this.id, this);
+    }
+    
+    private void initializeMenu(){
+        JMenuItem changeBackground = new JMenuItem("Mudar cor do fundo");
+        JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
+        changeBackground.addActionListener(e -> changeBackground());
+        changeForeground.addActionListener(e -> changeForeground());
+        
+        menu.addSeparator();
+        TextMenuItems.addTo(menu, this);
+        menu.add(changeBackground);
+        menu.add(changeForeground);
+        menu.addSeparator();
+        menu.add(new ExportMenu(this).exportMenu);
     }
     
     public static CodeArea createArea(){
@@ -54,27 +68,48 @@ public class CodeArea extends JTextArea{
         
         return newCodeArea;
     }
-
-    private void ChangeBackground() {
-        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
-    }
-
-    private void ChangeForeground() {
-        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
+    
+    @Override
+    public void selectComponent() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
-    private void deleteArea() {
+    @Override
+    public void copyComponent() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void pasteComponent() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    @Override
+    public void cutComponent() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+    
+    @Override
+    public void deleteComponent() {
         codeAreas.remove(this.id);
         EditorPane parent = (EditorPane) this.getParent();
         parent.removeComponent(this);
     }
-
-    private void lockArea() {
-        if(isLocked) isLocked = false;
-        else isLocked = true;
+    @Override
+    public void setLocked(boolean locked) {
+        isLocked = locked;
+    }
+    
+    public void changeBackground() {
+        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
     }
 
-    private void export(String type) {
+    private void changeForeground() {
+        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
+    }
+
+    @Override
+    public void export(String type) {
         
         if (textFile == null){
             textFile = new CodeFile(this.getText(), this.id, type);
@@ -83,6 +118,11 @@ public class CodeArea extends JTextArea{
             textFile.write(this.getText());
         }
         textFile.openWith();
+    }
+    
+    @Override
+    public boolean isLocked() {
+        return isLocked;
     }
     
     @Override
@@ -96,113 +136,15 @@ public class CodeArea extends JTextArea{
         repaint();
     }
     
-    private void initializeMenu(CodeArea codeArea){
-        JMenuItem select = new JMenuItem("Selecionar tudo");
-        JMenuItem cut = new JMenuItem("Recortar texto");
-        JMenuItem copy = new JMenuItem("Copiar texto");
-        JMenuItem paste = new JMenuItem("Colar texto");
-        JMenuItem changeBackground = new JMenuItem("Mudar cor do fundo");
-        JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
-        JMenuItem delete = new JMenuItem("Excluir janela");
-        JToggleButton lock = new JToggleButton("Travar janela");
-        JMenu exportMenu = new JMenu("Exportar para...");
-        JMenuItem exportTxt = new JMenuItem(".txt");
-        JMenuItem exportJar = new JMenuItem(".java");
-        JMenuItem exportCs = new JMenuItem(".cs");
-        JMenuItem exportJs = new JMenuItem(".js");
-        JMenuItem exportHtml = new JMenuItem(".html");
-        JMenuItem exportCss = new JMenuItem(".css");
-        
-        select.addActionListener(e -> codeArea.selectAll());
-        cut.addActionListener(e -> codeArea.cut());
-        copy.addActionListener(e -> codeArea.copy());
-        paste.addActionListener(e -> codeArea.paste());
-        changeBackground.addActionListener(e -> ChangeBackground());
-        changeForeground.addActionListener(e -> ChangeForeground());
-        delete.addActionListener(e -> deleteArea());
-        lock.addActionListener(e -> lockArea());
-        exportTxt.addActionListener(e -> export(".txt"));
-        exportJar.addActionListener(e -> export(".java"));
-        exportCs.addActionListener(e -> export(".cs"));
-        exportJs.addActionListener(e -> export(".js"));
-        exportHtml.addActionListener(e -> export(".html"));
-        exportCss.addActionListener(e -> export(".cs"));
-
-        exportMenu.add(exportTxt);
-        exportMenu.addSeparator();
-        exportMenu.add(exportJar);
-        exportMenu.add(exportCs);
-        exportMenu.add(exportJs);
-        exportMenu.add(exportHtml);
-        exportMenu.add(exportCss);
-        menu.add(select);
-        menu.add(cut);
-        menu.add(copy);
-        menu.add(paste);
-        menu.addSeparator();
-        menu.add(changeBackground);
-        menu.add(changeForeground);
-        menu.addSeparator();
-        menu.add(delete);
-        menu.add(lock);
-        menu.add(exportMenu);
+    @Override
+    public void moveTo(int x, int y) {
+        pos_x = x;
+        pos_y = y;
+        setLocation(x, y);
     }
     
-    private MouseAdapter addMouseHandler(){
-        MouseAdapter mouseHandler = new MouseAdapter() {
-
-            @Override
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e)) { 
-                    mouseOffset = e.getPoint();
-                
-                    resizing = mouseOffset.x > width - 10 && mouseOffset.y > height - 10;
-                    
-                } else if (SwingUtilities.isRightMouseButton(e)) {
-                    menu.show(CodeArea.this, e.getX(), e.getY());
-                }
-            }
-
-            @Override
-            public void mouseDragged(MouseEvent e) {
-                if (mouseOffset == null || isLocked) {
-                    return;
-                }
-                // Mouse relative to the container
-                Point parentPoint = SwingUtilities.convertPoint(
-                    CodeArea.this,
-                    e.getPoint(),
-                    getParent()
-                );
-                
-                if (resizing){
-                    int newWidth = parentPoint.x - getX();
-                    int newHeight = parentPoint.y - getY();
-                    
-                    newWidth = Math.max(newWidth, 50);
-                    newHeight = Math.max(newHeight, 50);
-                    
-                    resize(newWidth, newHeight);
-                }
-                
-                else{
-                    int x = parentPoint.x - mouseOffset.x;
-                    int y = parentPoint.y - mouseOffset.y;
-                
-                    // Prevents going out of bounds
-                    if(x >= 0 && y >= 0){
-                        pos_x = x;
-                        pos_y = y;
-                        setLocation(x, y);
-                    } 
-                }
-            }
-
-            @Override
-            public void mouseReleased(MouseEvent e) {
-                mouseOffset = null;
-            }
-        };
-        return mouseHandler;
+    @Override
+    public void showMenu(int x, int y) {
+        menu.show(this, x, y);
     }
 }
