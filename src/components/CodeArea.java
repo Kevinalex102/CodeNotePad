@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import handlers.*;
 import actions.*;
+import editing.ComponentEditor;
 import menus.*;
 import java.util.HashMap;
 import javax.swing.*;
@@ -19,16 +20,24 @@ import javax.swing.*;
  */
 public class CodeArea extends JTextArea implements IDragResizeMouseHandler, ComponentActions, ExportActions{
     
-    private static int idCounter = 0;
-    private int id;
-    private CodeFile textFile = null;
+    private int id, pos_x, pos_y, width, height;
+    private Color bgColor, fgColor;
     private boolean isLocked = false;
-    
-    private int pos_x, pos_y, height, width;
-    
+    private final ComponentPopupMenu menu;
+    private CodeFile textFile = null;
+    private static int idCounter = 0;
     private static HashMap<Integer, CodeArea> codeAreas = new HashMap<Integer, CodeArea>();
     
-    private final ComponentPopupMenu menu;
+    public record Instructions(
+        String text, 
+        int pos_x, 
+        int pos_y, 
+        int width, 
+        int height, 
+        Color bgColor, 
+        Color fgColor, 
+        boolean locked
+    ){}
 
     private CodeArea(){
         super(10, 10);
@@ -61,6 +70,8 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         CodeArea newCodeArea = new CodeArea();
         
         newCodeArea.setBounds(100, 100, 250, 100);
+        newCodeArea.pos_x = 100;
+        newCodeArea.pos_y = 100;
         newCodeArea.width = 250;
         newCodeArea.height = 100;
         newCodeArea.setBackground(Color.gray);
@@ -69,45 +80,52 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         return newCodeArea;
     }
     
-    @Override
-    public void selectComponent() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public static CodeArea createArea(Instructions instructions){
+        CodeArea newCodeArea = new CodeArea();
+        
+        int x = instructions.pos_x;
+        int y = instructions.pos_y;
+        
+        newCodeArea.setBounds(x + 10, y + 10, instructions.width, instructions.height);
+        newCodeArea.pos_x = x + 10;
+        newCodeArea.pos_y = y + 10;
+        newCodeArea.width = instructions.width;
+        newCodeArea.height = instructions.height;
+        newCodeArea.setBackground(instructions.bgColor);
+        newCodeArea.setForeground(instructions.fgColor);
+        newCodeArea.setLocked(instructions.locked);
+        newCodeArea.setText(instructions.text);
+        
+        return newCodeArea;
     }
     
     @Override
     public void copyComponent() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ComponentEditor.copyComponent(this);
     }
 
     @Override
     public void pasteComponent() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ComponentEditor.pasteComponent(this.getParent());
     }
 
     @Override
     public void cutComponent() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        ComponentEditor.copyComponent(this);
+        deleteComponent();
     }
     
     @Override
     public void deleteComponent() {
         codeAreas.remove(this.id);
-        EditorPane parent = (EditorPane) this.getParent();
-        parent.removeComponent(this);
+        ComponentEditor.deleteComponent(this);
     }
+    
     @Override
     public void setLocked(boolean locked) {
         isLocked = locked;
     }
     
-    public void changeBackground() {
-        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
-    }
-
-    private void changeForeground() {
-        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
-    }
-
     @Override
     public void export(String type) {
         
@@ -118,11 +136,6 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
             textFile.write(this.getText());
         }
         textFile.openWith();
-    }
-    
-    @Override
-    public boolean isLocked() {
-        return isLocked;
     }
     
     @Override
@@ -140,11 +153,58 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     public void moveTo(int x, int y) {
         pos_x = x;
         pos_y = y;
+        
         setLocation(x, y);
+        
+        revalidate();
+        repaint();
     }
     
     @Override
     public void showMenu(int x, int y) {
         menu.show(this, x, y);
+    }
+    
+    public void changeBackground() {
+        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
+    }
+
+    private void changeForeground() {
+        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
+    }
+    
+    @Override
+    public void setBackground(Color color){
+        super.setBackground(color);
+        bgColor = color;
+    }
+    
+    @Override
+    public void setForeground(Color color){
+        super.setForeground(color);
+        fgColor = color;
+    }
+    
+    public int getPosX(){
+        return pos_x;
+    }
+    public int getPosY(){
+        return pos_y;
+    }
+    public int getWidth(){
+        return width;
+    }
+    public int getHeight(){
+        return height;
+    }
+    public Color getBg(){
+        return bgColor;
+    }
+    public Color getFg(){
+        return fgColor;
+    }
+    @Override
+    public boolean isLocked() {
+        return isLocked;
     }
 }

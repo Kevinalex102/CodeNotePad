@@ -9,7 +9,6 @@ package actions;
  * @author kevin
  */
 public interface ComponentActions {
-    void selectComponent();
     void copyComponent();
     void pasteComponent();
     void cutComponent();

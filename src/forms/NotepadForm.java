@@ -253,7 +253,7 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_insertCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertCodeActionPerformed
         // TODO add your handling code here:
-        editorPane.addComponent(CodeArea.createArea());
+        editorPane.add(CodeArea.createArea());
     }//GEN-LAST:event_btn_insertCodeActionPerformed
 
     private void checkBox_boldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_boldActionPerformed

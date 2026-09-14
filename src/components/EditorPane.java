@@ -4,6 +4,7 @@
  */
 package components;
 
+import java.awt.Component;
 import javax.swing.*;
 
 /**
@@ -18,10 +19,12 @@ public class EditorPane extends JLayeredPane {
         setLayout(null);
     }
     
-    public void addComponent(JComponent component){
-        this.add(component);
+    @Override
+    public Component add(Component component){
+        super.add(component);
         revalidate();
         repaint();
+        return component;
     }
     
     public void removeComponent(JComponent component){
