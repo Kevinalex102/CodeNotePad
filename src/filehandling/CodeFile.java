@@ -74,7 +74,9 @@ public class CodeFile {
         File folder = tempPath.toFile();
         try{
             for(File file:folder.listFiles()){
-                file.delete();
+                if (!file.getName().equals(".gitkeep")) {
+                    file.delete();
+                }
             }
         }
         catch(Exception e)
