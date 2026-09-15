@@ -25,7 +25,7 @@ public class CodeFile {
     
     public CodeFile(String text, int id, String type)
     {
-        Path tempPath = Paths.get("src/temp");
+        Path tempPath = Paths.get("src/temp/codeFiles");
         tempPath = tempPath.toAbsolutePath();
         this.file = new File(tempPath + "/code" + id + type);
         this.text = text;
@@ -68,9 +68,8 @@ public class CodeFile {
     }
     
     public static void clearCache(){
-        Path tempPath = Paths.get("src/temp");
+        Path tempPath = Paths.get("src/temp/codeFiles");
         tempPath = tempPath.toAbsolutePath();
-        System.out.println(tempPath);
         File folder = tempPath.toFile();
         try{
             for(File file:folder.listFiles()){

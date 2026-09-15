@@ -60,7 +60,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         newImagePanel.setBounds(100, 100, 300, 300);
         newImagePanel.repaint();
         newImagePanel.setVisible(true);
-        newImagePanel.imageFile = new ImageFile(file);
+        newImagePanel.imageFile = new ImageFile(file, newImagePanel.id);
         
         newImagePanel.pos_x = 100;
         newImagePanel.pos_y = 100;
@@ -79,7 +79,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         int y = instructions.pos_y;
         
         newImagePanel.setBounds(x + 10, y + 10, instructions.width, instructions.height);
-        newImagePanel.imageFile = new ImageFile(file);
+        newImagePanel.imageFile = new ImageFile(file, newImagePanel.id);
         newImagePanel.pos_x = x + 10;
         newImagePanel.pos_y = y + 10;
         newImagePanel.width = instructions.width;

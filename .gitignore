@@ -1,5 +1,7 @@
 /nbproject/private/
 /dist/
 /build/
-/src/temp/*
-!src/temp/.gitkeep
+/src/temp/codeFiles/*
+/src/temp/images/*
+!src/temp/codeFiles/.gitkeep
+!src/temp/images/.gitkeep
