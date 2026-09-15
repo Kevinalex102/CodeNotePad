@@ -4,7 +4,7 @@
  */
 package forms;
 
-import filehandling.CodeFile;
+import filehandling.*;
 import components.*;
 import java.awt.*;
 
@@ -161,6 +161,11 @@ public class NotepadForm extends javax.swing.JFrame {
         });
 
         btn_insertImage.setText("Imagem");
+        btn_insertImage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_insertImageActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panel_insertLayout = new javax.swing.GroupLayout(panel_insert);
         panel_insert.setLayout(panel_insertLayout);
@@ -313,6 +318,11 @@ public class NotepadForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         CodeFile.clearCache();
     }//GEN-LAST:event_formWindowClosing
+
+    private void btn_insertImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertImageActionPerformed
+        // TODO add your handling code here:
+        editorPane.add(ImagePanel.createPanel(ImageFile.readFile(this)));
+    }//GEN-LAST:event_btn_insertImageActionPerformed
     
     /**
      * @param args the command line arguments

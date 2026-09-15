@@ -8,7 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import components.CodeArea;
+import components.*;
 import java.awt.Color;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -20,36 +20,61 @@ import javax.swing.JComponent;
  */
 public class Converter {
     
-    public static String toJson(JComponent component) {
-        if(component instanceof CodeArea){
-            return toJson((CodeArea)component);
+    public static String toJson(JComponent component){
+        switch (component) {
+            case CodeArea codeArea -> {
+                return toJson(codeArea);
+            }
+            case ImagePanel imagePanel -> {
+                return toJson(imagePanel);
+            }
+            default -> {
+                 return "";
+            }
         }
-        return "";
     }
     
     public static String toJson(CodeArea component) {
-    ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
-    ObjectNode node = mapper.createObjectNode();
+        ObjectNode node = mapper.createObjectNode();
 
-    node.put("text", component.getText());
-    node.put("pos_x", component.getPosX());
-    node.put("pos_y", component.getPosY());
-    node.put("width", component.getWidth());
-    node.put("height", component.getHeight());
-    node.put("bgColor", component.getBg().toString());
-    node.put("fgColor", component.getFg().toString());
-    node.put("locked", component.isLocked());
+        node.put("text", component.getText());
+        node.put("pos_x", component.getPosX());
+        node.put("pos_y", component.getPosY());
+        node.put("width", component.getWidth());
+        node.put("height", component.getHeight());
+        node.put("bgColor", component.getBg().toString());
+        node.put("fgColor", component.getFg().toString());
+        node.put("locked", component.isLocked());
 
-    try {
-        return mapper.writeValueAsString(node);
-    } catch (JsonProcessingException ex) {
-        throw new IllegalArgumentException("Could not create JSON", ex);
+        try {
+            return mapper.writeValueAsString(node);
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException("Could not create JSON", ex);
+        }
     }
-}
+    
+    public static String toJson(ImagePanel component) {
+        ObjectMapper mapper = new ObjectMapper();
+
+        ObjectNode node = mapper.createObjectNode();
+
+        node.put("file", component.getPath());
+        node.put("pos_x", component.getPosX());
+        node.put("pos_y", component.getPosY());
+        node.put("width", component.getWidth());
+        node.put("height", component.getHeight());
+        node.put("locked", component.isLocked());
+
+        try {
+            return mapper.writeValueAsString(node);
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException("Could not create JSON", ex);
+        }
+    }
     
     public static CodeArea.Instructions toCodeArea(String jsonString){
-        
         ObjectMapper mapper = new ObjectMapper();
 
         JsonNode node;
@@ -69,9 +94,29 @@ public class Converter {
         
         Color bgColor = Converter.colorExtractor(node.get("bgColor").asText());
         Color fgColor = Converter.colorExtractor(node.get("fgColor").asText());
-        
     
         return new CodeArea.Instructions(text, pos_x, pos_y, width, height, bgColor, fgColor, locked);
+    }
+    
+    public static ImagePanel.Instructions toImagePanel(String jsonString){
+        ObjectMapper mapper = new ObjectMapper();
+
+        JsonNode node;
+        try {
+            node = mapper.readTree(jsonString);
+        } catch (JsonProcessingException ex) {
+            System.getLogger(Converter.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            throw new IllegalArgumentException("Not a Json string", ex);
+        }
+
+        String file = node.get("file").asText();
+        int pos_x = node.get("pos_x").asInt();
+        int pos_y = node.get("pos_y").asInt();
+        int width = node.get("width").asInt();
+        int height = node.get("height").asInt();
+        boolean locked = node.get("locked").asBoolean();
+    
+        return new ImagePanel.Instructions(file, pos_x, pos_y, width, height, locked);
     }
     
     private static Color colorExtractor(String colorString){

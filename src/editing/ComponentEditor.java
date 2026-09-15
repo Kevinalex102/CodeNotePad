@@ -6,6 +6,7 @@ package editing;
 
 import components.CodeArea;
 import components.EditorPane;
+import components.ImagePanel;
 import filehandling.Converter;
 import java.awt.Container;
 import java.awt.Toolkit;
@@ -31,8 +32,15 @@ public class ComponentEditor {
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
             try {
-                CodeArea.Instructions newAreaInstructions = Converter.toCodeArea((String) clipboard.getData(DataFlavor.stringFlavor));
-                container.add(CodeArea.createArea(newAreaInstructions));
+                String clipboardData = (String)clipboard.getData(DataFlavor.stringFlavor);
+                if(clipboardData.contains("text")){
+                    CodeArea.Instructions newAreaInstructions = Converter.toCodeArea(clipboardData);
+                    container.add(CodeArea.createArea(newAreaInstructions));
+                }
+                else if(clipboardData.contains("file")){
+                    ImagePanel.Instructions newImageInstructions = Converter.toImagePanel(clipboardData);
+                    container.add(ImagePanel.createPanel(newImageInstructions));
+                }
                 
             } catch (UnsupportedFlavorException ex) {
                 System.getLogger(CodeArea.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);

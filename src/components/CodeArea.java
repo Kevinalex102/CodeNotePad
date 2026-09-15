@@ -19,14 +19,15 @@ import javax.swing.*;
  * @author kevin
  */
 public class CodeArea extends JTextArea implements IDragResizeMouseHandler, ComponentActions, ExportActions{
-    
-    private int id, pos_x, pos_y, width, height;
+
+    private final int id;
+    private int pos_x, pos_y, width, height;
     private Color bgColor, fgColor;
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
     private CodeFile textFile = null;
     private static int idCounter = 0;
-    private static HashMap<Integer, CodeArea> codeAreas = new HashMap<Integer, CodeArea>();
+    private static HashMap<Integer, CodeArea> codeAreas = new HashMap<>();
     
     public record Instructions(
         String text, 
