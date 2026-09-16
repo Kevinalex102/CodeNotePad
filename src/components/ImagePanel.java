@@ -33,7 +33,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     private final ComponentPopupMenu menu;
     private BufferedImage image;
     private ImageFile imageFile;
-    private static HashMap<Integer, ImagePanel> images = new HashMap<>();
+    public static HashMap<Integer, ImagePanel> images = new HashMap<>();
     
     public record Instructions(
         String file, 
@@ -41,7 +41,8 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         int pos_y, 
         int width, 
         int height, 
-        boolean locked
+        boolean locked,
+        Integer id
     ){}
     
     private ImagePanel(){
@@ -195,5 +196,11 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     }
     public String getPath() {
         return imageFile.getFile().toString();
+    }
+    public int getId(){
+        return id;
+    }
+    public static int getIdCounter(){
+        return idCounter;
     }
 }

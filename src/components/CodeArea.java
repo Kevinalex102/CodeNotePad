@@ -27,7 +27,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     private final ComponentPopupMenu menu;
     private CodeFile textFile = null;
     private static int idCounter = 0;
-    private static HashMap<Integer, CodeArea> codeAreas = new HashMap<>();
+    public static HashMap<Integer, CodeArea> codeAreas = new HashMap<>();
     
     public record Instructions(
         String text, 
@@ -37,8 +37,9 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         int height, 
         Color bgColor, 
         Color fgColor, 
-        boolean locked
-    ){}
+        boolean locked,
+        Integer id
+        ){}
 
     private CodeArea(){
         super(10, 10);
@@ -207,5 +208,11 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     @Override
     public boolean isLocked() {
         return isLocked;
+    }
+    public int getId(){
+        return id;
+    }
+    public static int getIdCounter(){
+        return idCounter;
     }
 }

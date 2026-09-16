@@ -193,6 +193,11 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_openFile.setText("Abrir");
 
         btn_saveFile.setText("Salvar");
+        btn_saveFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_saveFileActionPerformed(evt);
+            }
+        });
 
         btn_newFile.setText("Novo");
 
@@ -324,6 +329,11 @@ public class NotepadForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         editorPane.add(ImagePanel.createPanel(ImageFile.readFile(this)));
     }//GEN-LAST:event_btn_insertImageActionPerformed
+
+    private void btn_saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveFileActionPerformed
+        // TODO add your handling code here:
+        NotePadFile.save(Converter.toJsonNode(mainTextArea));
+    }//GEN-LAST:event_btn_saveFileActionPerformed
     
     /**
      * @param args the command line arguments

@@ -23,7 +23,7 @@ import javax.swing.JComponent;
  */
 public class ComponentEditor {
     public static void copyComponent(JComponent component) {
-        StringSelection jsonInstructions = new StringSelection(Converter.toJson(component));
+        StringSelection jsonInstructions = new StringSelection(Converter.toJson(component, true));
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(jsonInstructions, null);
     }
@@ -34,11 +34,11 @@ public class ComponentEditor {
             try {
                 String clipboardData = (String)clipboard.getData(DataFlavor.stringFlavor);
                 if(clipboardData.contains("text")){
-                    CodeArea.Instructions newAreaInstructions = Converter.toCodeArea(clipboardData);
+                    CodeArea.Instructions newAreaInstructions = Converter.toCodeArea(clipboardData, true);
                     container.add(CodeArea.createArea(newAreaInstructions));
                 }
                 else if(clipboardData.contains("file")){
-                    ImagePanel.Instructions newImageInstructions = Converter.toImagePanel(clipboardData);
+                    ImagePanel.Instructions newImageInstructions = Converter.toImagePanel(clipboardData, true);
                     container.add(ImagePanel.createPanel(newImageInstructions));
                 }
                 
