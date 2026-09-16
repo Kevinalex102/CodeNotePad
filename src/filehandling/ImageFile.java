@@ -12,8 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import javax.imageio.ImageIO;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 /**
  *
@@ -24,7 +22,7 @@ public class ImageFile {
     private File file;
     
     public ImageFile(File file, int id){
-        this.file = createFile(file, id);
+        this.file = ImageFile.copyFile(file, id);
     }
     
     private static String getType(Path path){
@@ -42,16 +40,16 @@ public class ImageFile {
         }
     }
     
-    private static File createFile(File oldFile, int id){
+    public static File copyFile(File oldFile, int id){
         File newFile;
         Path oldPath = oldFile.toPath();
         String type = getType(oldPath);
         
-        Path tempPath = Paths.get("src/temp/images");
-        tempPath = Path.of(tempPath.toString(), "/image" + id + type);
-        tempPath = tempPath.toAbsolutePath();
+        Path imagesPath = getImagesFolder().toPath();
+        imagesPath = Path.of(imagesPath.toString(), "/image" + id + type);
+        imagesPath = imagesPath.toAbsolutePath();
         try {
-            newFile = Files.copy(oldPath, tempPath, StandardCopyOption.REPLACE_EXISTING).toFile();
+            newFile = Files.copy(oldPath, imagesPath, StandardCopyOption.REPLACE_EXISTING).toFile();
         } catch (IOException e) {
             return null;
         }
@@ -59,26 +57,28 @@ public class ImageFile {
         return newFile;
     }
     
-    public static File readFile(JFrame form){
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+    public static File copyFile(File oldFile, File newFolder){
+        File newFile;
+        Path oldPath = oldFile.toPath();        
+        String name = oldPath.getName(oldPath.getNameCount() - 1).toString();
         
-        int result = fileChooser.showOpenDialog(form);
-        
-        if (result == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-            if(isImage(selectedFile)){
-                return selectedFile;
-            }
+        Path newPath = newFolder.toPath();
+        newPath = Path.of(newPath.toString(), "/" + name);
+        newPath = newPath.toAbsolutePath();
+        try {
+            newFile = Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING).toFile();
+        } catch (IOException e) {
+            return null;
         }
-        return null;
+        
+        return newFile;
     }
     
     public static File readFile(String filePath){
         return new File(filePath);
     }
     
-    private static boolean isImage(File file) {
+    public static boolean isImage(File file) {
         try {
             BufferedImage image = ImageIO.read(file);
             return image != null;
@@ -91,10 +91,14 @@ public class ImageFile {
         return file;
     }
     
-    public static void clearCache(){
+    public static File getImagesFolder(){
         Path imagesPath = Paths.get("src/temp/images");
         imagesPath = imagesPath.toAbsolutePath();
-        File folder = imagesPath.toFile();
+        return imagesPath.toFile();
+    }
+    
+    public static void clearCache(){
+        File folder = getImagesFolder();
         try{
             for(File file:folder.listFiles()){
                 if (!file.getName().equals(".gitkeep")) {

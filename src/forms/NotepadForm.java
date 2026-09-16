@@ -7,6 +7,9 @@ package forms;
 import filehandling.*;
 import components.*;
 import java.awt.*;
+import java.io.File;
+import java.nio.file.Path;
+import javax.swing.JFileChooser;
 
 /**
  *
@@ -200,6 +203,11 @@ public class NotepadForm extends javax.swing.JFrame {
         });
 
         btn_newFile.setText("Novo");
+        btn_newFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_newFileActionPerformed(evt);
+            }
+        });
 
         btn_print.setText("Imprimir");
 
@@ -327,13 +335,18 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_insertImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertImageActionPerformed
         // TODO add your handling code here:
-        editorPane.add(ImagePanel.createPanel(ImageFile.readFile(this)));
+        editorPane.add(ImagePanel.createPanel(chooseImage()));
     }//GEN-LAST:event_btn_insertImageActionPerformed
 
     private void btn_saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveFileActionPerformed
         // TODO add your handling code here:
-        NotePadFile.save(Converter.toJsonNode(mainTextArea));
+        NotePadFile.save(this, Converter.toJsonNode(mainTextArea));
     }//GEN-LAST:event_btn_saveFileActionPerformed
+
+    private void btn_newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newFileActionPerformed
+        // TODO add your handling code here:
+        new NotePadFile(chooseFolder());
+    }//GEN-LAST:event_btn_newFileActionPerformed
     
     /**
      * @param args the command line arguments
@@ -358,6 +371,40 @@ public class NotepadForm extends javax.swing.JFrame {
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new NotepadForm().setVisible(true));
+    }
+    
+    public File chooseFolder(){
+        JFileChooser chooser;
+        chooser = new JFileChooser(); 
+        chooser.setCurrentDirectory(new java.io.File("user.home"));
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
+        if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
+            System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
+            File folder = chooser.getSelectedFile();
+            if(folder != null){
+                return folder;
+            }
+        }
+        else {
+          System.out.println("No Selection ");
+        }
+        return null;
+    }
+    
+    public File chooseImage(){
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        
+        int result = fileChooser.showOpenDialog(this);
+        
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            if(ImageFile.isImage(selectedFile)){
+                return selectedFile;
+            }
+        }
+        return null;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
