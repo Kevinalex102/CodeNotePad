@@ -13,7 +13,7 @@ import javax.swing.*;
  */
 public class EditorPane extends JLayeredPane {
     
-    private JComponent backgroundComponent;
+    private JTextArea backgroundComponent;
 
     public EditorPane() {
         setLayout(null);
@@ -54,5 +54,13 @@ public class EditorPane extends JLayeredPane {
                 getHeight()
             );
         }
+    }
+    
+    @Override
+    public void removeAll(){
+        super.removeAll();
+        add(backgroundComponent);
+        setBackgroundComponent(backgroundComponent);
+        doLayout();
     }
 }

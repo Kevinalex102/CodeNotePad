@@ -99,7 +99,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         try {       
             image = ImageIO.read(file);
         } catch (IOException ex) {
-            System.getLogger(ImagePanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            throw new IllegalArgumentException("Could not read image (Check if image is missing!)", ex);
         }
     }
     

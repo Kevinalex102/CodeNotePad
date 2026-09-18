@@ -102,8 +102,7 @@ public class ImageFile {
         return imagesPath.toFile();
     }
     
-    public static void clearCache(){
-        File folder = getImagesFolder();
+    public static void clearCache(File folder){
         try{
             for(File file:folder.listFiles()){
                 if (!file.getName().equals(".gitkeep")) {

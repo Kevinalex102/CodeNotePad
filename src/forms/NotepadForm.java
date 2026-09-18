@@ -8,7 +8,6 @@ import filehandling.*;
 import components.*;
 import java.awt.*;
 import java.io.File;
-import java.nio.file.Path;
 import javax.swing.JFileChooser;
 
 /**
@@ -335,7 +334,7 @@ public class NotepadForm extends javax.swing.JFrame {
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
         CodeFile.clearCache();
-        ImageFile.clearCache();
+        ImageFile.clearCache(ImageFile.getImagesFolder());
     }//GEN-LAST:event_formWindowClosing
 
     private void btn_insertImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertImageActionPerformed
@@ -355,7 +354,7 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
         // TODO add your handling code here:
-        NotePadFile.load(this);
+        NotePadFile.load(this, editorPane);
     }//GEN-LAST:event_btn_openFileActionPerformed
     
     /**
@@ -390,7 +389,6 @@ public class NotepadForm extends javax.swing.JFrame {
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
-            System.out.println("getSelectedFile() : " + chooser.getSelectedFile());
             File folder = chooser.getSelectedFile();
             if(folder != null){
                 return folder;
@@ -415,6 +413,21 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         }
         return null;
+    }
+    
+    public void loadTextArea(String text, Color bgColor, Color fgColor, boolean bold, boolean italic){
+        editorPane.removeAll();
+        mainTextArea.setText(text);
+        mainTextArea.setBackground(bgColor);
+        btn_bgColor.setBackground(bgColor);
+        mainTextArea.setForeground(fgColor);
+        btn_textColor.setBackground(fgColor);
+        
+        Font font = mainTextArea.getFont();
+        int fontInt = 0;
+        if(bold)fontInt++;
+        if(italic)fontInt+=2;
+        mainTextArea.setFont(font.deriveFont(fontInt));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -10,9 +10,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import components.CodeArea;
+import components.EditorPane;
 import components.ImagePanel;
 import static filehandling.Converter.toJsonNode;
 import forms.NotepadForm;
+import java.awt.Color;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -42,11 +44,10 @@ public class NotePadFile {
         writeData(data);
     }
     
-    public static void load(NotepadForm form){
+    public static void load(NotepadForm form, EditorPane editorPane){
         new NotePadFile(form.chooseFolder());
-        loadImages();
         String data = readData();
-        loadFromData(data);
+        loadFromData(data, editorPane, form);
     }
     
     private static String saveJson(ObjectNode textAreaJson){
@@ -104,6 +105,7 @@ public class NotePadFile {
             while ((i = reader.read()) != -1) {
                 data += (char)i;
             }
+            reader.close();
         } catch (IOException ex){
             throw new IllegalArgumentException("Could not read data.json", ex);
         }
@@ -112,6 +114,7 @@ public class NotePadFile {
     
     private static void saveImages(){
         File newFolder = new File(currFolder, "images");
+        ImageFile.clearCache(newFolder);
         try{
             for(ImagePanel imagePanel: ImagePanel.images.values()){
                 ImageFile file = imagePanel.getImageFile();
@@ -124,36 +127,39 @@ public class NotePadFile {
         }
     }
     
-    private static void loadImages(){
-        
-    }
-    
-    private static void loadFromData(String data){
+    private static void loadFromData(String data, EditorPane editorPane, NotepadForm form){
         try {
             ObjectNode node = (ObjectNode) new ObjectMapper().readTree(data);
             
             JsonNode mainTextAreaNode = node.get("mainTextArea");
-            // loadmainTextArea(mainTextAreaNode);
-            System.out.println(mainTextAreaNode.get("text"));
+            
+            String text = mainTextAreaNode.get("text").asText();
+            Color bgColor = new Color(mainTextAreaNode.get("bgColor").asInt());
+            Color fgColor = new Color(mainTextAreaNode.get("fgColor").asInt());
+            boolean bold = mainTextAreaNode.get("bold").asBoolean();
+            boolean italic = mainTextAreaNode.get("italic").asBoolean();
+            
+            form.loadTextArea(text, bgColor, fgColor, bold, italic);
             
             CodeArea.resetHashMap();
             CodeArea.setIdCounter(node.get("codeAreasIdCounter").asInt());
-            System.out.println(CodeArea.getIdCounter());
             ImagePanel.resetHashMap();
             ImagePanel.setIdCounter(node.get("imagesIdCounter").asInt());
-            System.out.println(ImagePanel.getIdCounter());
             
             ArrayNode codeAreasNode = (ArrayNode) node.get("codeAreas");
             for(JsonNode codeAreaNode: codeAreasNode){
-                //Converter.toCodeArea();
-                System.out.println(codeAreaNode.get("text"));
+                String jsonString = new ObjectMapper().writeValueAsString(codeAreaNode);
+                CodeArea.Instructions instructions = Converter.toCodeArea(jsonString, false);
+                editorPane.add(CodeArea.createArea(instructions));
             }
             
             ArrayNode imagesNode = (ArrayNode) node.get("images");
             for(JsonNode imageNode: imagesNode){
-                //Converter.imagePanel();
-                System.out.println(imageNode.get("file"));
+                String jsonString = new ObjectMapper().writeValueAsString(imageNode);
+                ImagePanel.Instructions instructions = Converter.toImagePanel(jsonString, false);
+                editorPane.add(ImagePanel.createPanel(instructions));
             }
+            
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException("Could not load from data", ex);
         }

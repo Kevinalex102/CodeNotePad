@@ -103,7 +103,7 @@ public class Converter {
         Font currFont = textArea.getFont();
         ObjectNode node = mapper.createObjectNode();
         Color bg = textArea.getBackground();
-        Color fg = textArea.getBackground();
+        Color fg = textArea.getForeground();
 
         node.put("text", textArea.getText());
         node.put("bgColor", bg.getRGB());
