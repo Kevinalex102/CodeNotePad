@@ -194,6 +194,11 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTabbedPane.addTab("Inserir", panel_insert);
 
         btn_openFile.setText("Abrir");
+        btn_openFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_openFileActionPerformed(evt);
+            }
+        });
 
         btn_saveFile.setText("Salvar");
         btn_saveFile.addActionListener(new java.awt.event.ActionListener() {
@@ -347,6 +352,11 @@ public class NotepadForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         new NotePadFile(chooseFolder());
     }//GEN-LAST:event_btn_newFileActionPerformed
+
+    private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
+        // TODO add your handling code here:
+        NotePadFile.load(this);
+    }//GEN-LAST:event_btn_openFileActionPerformed
     
     /**
      * @param args the command line arguments

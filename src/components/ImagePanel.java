@@ -206,4 +206,10 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     public ImageFile getImageFile(){
         return imageFile;
     }
+    public static void setIdCounter(int value){
+        idCounter = value;
+    }
+    public static void resetHashMap(){
+        images.clear();
+    }
 }

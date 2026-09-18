@@ -5,6 +5,7 @@
 package filehandling;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -13,6 +14,7 @@ import components.ImagePanel;
 import static filehandling.Converter.toJsonNode;
 import forms.NotepadForm;
 import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
@@ -38,6 +40,13 @@ public class NotePadFile {
         saveImages();
         String data = saveJson(textAreaJson);
         writeData(data);
+    }
+    
+    public static void load(NotepadForm form){
+        new NotePadFile(form.chooseFolder());
+        loadImages();
+        String data = readData();
+        loadFromData(data);
     }
     
     private static String saveJson(ObjectNode textAreaJson){
@@ -84,10 +93,21 @@ public class NotePadFile {
         } catch (IOException ex) {
             throw new IllegalArgumentException("Could not write to data.json", ex);
         }
-    }
+    }    
     
-    public static void load(){
-        
+    private static String readData(){
+        File jsonFile = new File(currFolder, "data.json");
+        String data = "";
+        int i;
+        try {
+            var reader = new FileReader(jsonFile);
+            while ((i = reader.read()) != -1) {
+                data += (char)i;
+            }
+        } catch (IOException ex){
+            throw new IllegalArgumentException("Could not read data.json", ex);
+        }
+        return data;
     }
     
     private static void saveImages(){
@@ -104,7 +124,42 @@ public class NotePadFile {
         }
     }
     
-    private File newNotePad(File folder){;
+    private static void loadImages(){
+        
+    }
+    
+    private static void loadFromData(String data){
+        try {
+            ObjectNode node = (ObjectNode) new ObjectMapper().readTree(data);
+            
+            JsonNode mainTextAreaNode = node.get("mainTextArea");
+            // loadmainTextArea(mainTextAreaNode);
+            System.out.println(mainTextAreaNode.get("text"));
+            
+            CodeArea.resetHashMap();
+            CodeArea.setIdCounter(node.get("codeAreasIdCounter").asInt());
+            System.out.println(CodeArea.getIdCounter());
+            ImagePanel.resetHashMap();
+            ImagePanel.setIdCounter(node.get("imagesIdCounter").asInt());
+            System.out.println(ImagePanel.getIdCounter());
+            
+            ArrayNode codeAreasNode = (ArrayNode) node.get("codeAreas");
+            for(JsonNode codeAreaNode: codeAreasNode){
+                //Converter.toCodeArea();
+                System.out.println(codeAreaNode.get("text"));
+            }
+            
+            ArrayNode imagesNode = (ArrayNode) node.get("images");
+            for(JsonNode imageNode: imagesNode){
+                //Converter.imagePanel();
+                System.out.println(imageNode.get("file"));
+            }
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException("Could not load from data", ex);
+        }
+    }
+    
+    private File newNotePad(File folder){
         this.folder = folder;
         new File(folder, "images").mkdir();
         File data = new File(folder, "data.json");

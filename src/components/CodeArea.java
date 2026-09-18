@@ -215,4 +215,10 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     public static int getIdCounter(){
         return idCounter;
     }
+    public static void setIdCounter(int value){
+        idCounter = value;
+    }
+    public static void resetHashMap(){
+        codeAreas.clear();
+    }
 }
