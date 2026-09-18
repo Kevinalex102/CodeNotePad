@@ -57,15 +57,16 @@ public class ImageFile {
         return newFile;
     }
     
-    public static File copyFile(File oldFile, File newFolder){
+    public File copyFile(File newFolder){
         File newFile;
-        Path oldPath = oldFile.toPath();        
+        Path oldPath = file.toPath();        
         String name = oldPath.getName(oldPath.getNameCount() - 1).toString();
         
         Path newPath = newFolder.toPath();
         newPath = Path.of(newPath.toString(), "/" + name);
         newPath = newPath.toAbsolutePath();
         try {
+            this.file = newPath.toFile();
             newFile = Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING).toFile();
         } catch (IOException e) {
             return null;
@@ -89,6 +90,10 @@ public class ImageFile {
     
     public File getFile(){
         return file;
+    }
+    
+    public void updateFile(File file){
+        this.file = file;
     }
     
     public static File getImagesFolder(){

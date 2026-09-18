@@ -11,12 +11,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import components.CodeArea;
 import components.ImagePanel;
 import static filehandling.Converter.toJsonNode;
-import static filehandling.ImageFile.getImagesFolder;
 import forms.NotepadForm;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Path;
 
 /**
  *
@@ -37,8 +35,8 @@ public class NotePadFile {
         if(currFolder == null){
             new NotePadFile(form.chooseFolder());
         }
-        String data = saveJson(textAreaJson);
         saveImages();
+        String data = saveJson(textAreaJson);
         writeData(data);
     }
     
@@ -93,18 +91,16 @@ public class NotePadFile {
     }
     
     private static void saveImages(){
-        File tempFolder = ImageFile.getImagesFolder();
         File newFolder = new File(currFolder, "images");
         try{
-            for(File file:tempFolder.listFiles()){
-                if (!file.getName().equals(".gitkeep")) {
-                    ImageFile.copyFile(file, newFolder);
-                }
+            for(ImagePanel imagePanel: ImagePanel.images.values()){
+                ImageFile file = imagePanel.getImageFile();
+                file.copyFile(newFolder);
             }
         }
-        catch(Exception e)
+        catch(Exception ex)
         {
-            e.printStackTrace();
+            throw new IllegalArgumentException("Could not save images", ex);
         }
     }
     
