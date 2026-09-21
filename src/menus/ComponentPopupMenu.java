@@ -22,12 +22,14 @@ public class ComponentPopupMenu extends JPopupMenu{
         JMenuItem cut = new JMenuItem("Recortar componente");
         JMenuItem delete = new JMenuItem("Excluir componente");
         JCheckBoxMenuItem lock = new JCheckBoxMenuItem("Travar componente");
+        JMenuItem push = new JMenuItem("Trazer para frente");
 
         copy.addActionListener(e -> component.copyComponent());
         paste.addActionListener(e -> component.pasteComponent());
         cut.addActionListener(e -> component.cutComponent());
         delete.addActionListener(e -> component.deleteComponent());
         lock.addActionListener(e -> component.setLocked(lock.isSelected()));
+        push.addActionListener(e -> component.pushUp());
 
         add(copy);
         add(paste);
@@ -35,5 +37,6 @@ public class ComponentPopupMenu extends JPopupMenu{
         addSeparator();
         add(delete);
         add(lock);
+        add(push);
     }
 }

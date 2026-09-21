@@ -59,4 +59,9 @@ public class ComponentEditor {
         EditorPane parent = (EditorPane) component.getParent();
         parent.removeComponent(component);
     }
+    
+    public static void pushup(JComponent component){
+        EditorPane parent = (EditorPane) component.getParent();
+        parent.setPosition(component, 0);
+    }    
 }

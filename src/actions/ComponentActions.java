@@ -14,4 +14,5 @@ public interface ComponentActions {
     void cutComponent();
     void deleteComponent();
     void setLocked(boolean locked);
+    void pushUp();
 }

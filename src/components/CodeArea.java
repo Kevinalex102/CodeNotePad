@@ -129,6 +129,11 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     }
     
     @Override
+    public void pushUp() {
+        ComponentEditor.pushup(this);
+    }
+    
+    @Override
     public void export(String type) {
         
         if (textFile == null){

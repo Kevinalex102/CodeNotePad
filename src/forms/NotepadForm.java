@@ -52,7 +52,6 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_openFile = new javax.swing.JButton();
         btn_saveFile = new javax.swing.JButton();
         btn_newFile = new javax.swing.JButton();
-        btn_print = new javax.swing.JButton();
         editorPane = new components.EditorPane();
         mainTextArea = new javax.swing.JTextArea();
 
@@ -213,8 +212,6 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         });
 
-        btn_print.setText("Imprimir");
-
         javax.swing.GroupLayout panel_fileLayout = new javax.swing.GroupLayout(panel_file);
         panel_file.setLayout(panel_fileLayout);
         panel_fileLayout.setHorizontalGroup(
@@ -226,9 +223,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_saveFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_newFile)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btn_print)
-                .addContainerGap(400, Short.MAX_VALUE))
+                .addContainerGap(470, Short.MAX_VALUE))
         );
         panel_fileLayout.setVerticalGroup(
             panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -237,9 +232,8 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addGroup(panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btn_openFile)
                     .addComponent(btn_saveFile)
-                    .addComponent(btn_newFile)
-                    .addComponent(btn_print))
-                .addContainerGap(51, Short.MAX_VALUE))
+                    .addComponent(btn_newFile))
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Arquivo", panel_file);
@@ -436,7 +430,6 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JButton btn_insertImage;
     private javax.swing.JButton btn_newFile;
     private javax.swing.JButton btn_openFile;
-    private javax.swing.JButton btn_print;
     private javax.swing.JButton btn_saveFile;
     private javax.swing.JButton btn_textColor;
     private javax.swing.JCheckBox checkBox_bold;

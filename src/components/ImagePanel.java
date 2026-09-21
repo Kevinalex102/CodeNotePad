@@ -179,6 +179,11 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     public void setLocked(boolean locked) {
         isLocked = locked;
     }
+    
+    @Override
+    public void pushUp() {
+        ComponentEditor.pushup(this);
+    }
 
     public int getPosX() {
         return pos_x;
