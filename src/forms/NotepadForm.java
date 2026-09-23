@@ -267,6 +267,7 @@ public class NotepadForm extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_insertCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertCodeActionPerformed
@@ -328,11 +329,17 @@ public class NotepadForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_bgColorActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        // TODO add your handling code here:
+        if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));;
         CodeFile.clearCache();
         ImageFile.clearCache(ImageFile.getImagesFolder());
     }//GEN-LAST:event_formWindowClosing
 
+    private boolean showSaveDialog(){
+        SaveDialog saveDialog = new SaveDialog(null, true);
+        saveDialog.setVisible(true);
+        return saveDialog.getSave();
+    }
+    
     private void btn_insertImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertImageActionPerformed
         // TODO add your handling code here:
         editorPane.add(ImagePanel.createPanel(chooseImage()));
