@@ -41,6 +41,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         int pos_y, 
         int width, 
         int height, 
+        int layer,
         boolean locked,
         Integer id
     ){}
@@ -204,6 +205,10 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     }
     public int getId(){
         return id;
+    }
+    public int getLayer(){
+        EditorPane parent = (EditorPane) this.getParent();
+        return parent.getPosition(this);
     }
     public static int getIdCounter(){
         return idCounter;

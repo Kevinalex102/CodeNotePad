@@ -64,6 +64,7 @@ public class Converter {
             node.put("locked", false);
         } else {
             node.put("locked", component.isLocked());
+            node.put("layer", component.getLayer());
             node.put("id", component.getId());
         }
 
@@ -94,6 +95,7 @@ public class Converter {
         else{
             node.put("locked", component.isLocked());
             node.put("id", component.getId());
+            node.put("layer", component.getLayer());
         }
 
         return node;
@@ -133,12 +135,15 @@ public class Converter {
         Color bgColor = new Color(node.get("bgColor").asInt());
         Color fgColor = new Color(node.get("fgColor").asInt());
         
+        Integer id = null;
+        int layer = 0;
+        
         if(!pasting) {
-            int id = node.get("id").asInt();
-            return new CodeArea.Instructions(text, pos_x, pos_y, width, height, bgColor, fgColor, locked, id);
+            id = node.get("id").asInt();
+            layer = node.get("layer").asInt();
         }
     
-        return new CodeArea.Instructions(text, pos_x, pos_y, width, height, bgColor, fgColor, locked, null);
+        return new CodeArea.Instructions(text, pos_x, pos_y, width, height, layer, bgColor, fgColor, locked, id);
     }
     
     public static ImagePanel.Instructions toImagePanel(String jsonString, boolean pasting){
@@ -157,11 +162,14 @@ public class Converter {
         int height = node.get("height").asInt();
         boolean locked = node.get("locked").asBoolean();
         
+        Integer id = null;
+        int layer = 0;
+        
         if(!pasting) {
-            int id = node.get("id").asInt();
-            return new ImagePanel.Instructions(file, pos_x, pos_y, width, height, locked, id);
+            id = node.get("id").asInt();
+            layer = node.get("layer").asInt();
         }
     
-        return new ImagePanel.Instructions(file, pos_x, pos_y, width, height, locked, null);
+        return new ImagePanel.Instructions(file, pos_x, pos_y, width, height, layer, locked, id);
     }
 }

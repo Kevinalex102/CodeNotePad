@@ -150,14 +150,14 @@ public class NotePadFile {
             for(JsonNode codeAreaNode: codeAreasNode){
                 String jsonString = new ObjectMapper().writeValueAsString(codeAreaNode);
                 CodeArea.Instructions instructions = Converter.toCodeArea(jsonString, false);
-                editorPane.add(CodeArea.createArea(instructions));
+                editorPane.add(CodeArea.createArea(instructions), instructions.layer());
             }
             
             ArrayNode imagesNode = (ArrayNode) node.get("images");
             for(JsonNode imageNode: imagesNode){
                 String jsonString = new ObjectMapper().writeValueAsString(imageNode);
                 ImagePanel.Instructions instructions = Converter.toImagePanel(jsonString, false);
-                editorPane.add(ImagePanel.createPanel(instructions));
+                editorPane.add(ImagePanel.createPanel(instructions), instructions.layer());
             }
             
         } catch (JsonProcessingException ex) {

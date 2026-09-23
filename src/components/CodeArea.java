@@ -35,6 +35,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         int pos_y, 
         int width, 
         int height, 
+        int layer,
         Color bgColor, 
         Color fgColor, 
         boolean locked,
@@ -216,6 +217,10 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     }
     public int getId(){
         return id;
+    }
+    public int getLayer(){
+        EditorPane parent = (EditorPane) this.getParent();
+        return parent.getPosition(this);
     }
     public static int getIdCounter(){
         return idCounter;

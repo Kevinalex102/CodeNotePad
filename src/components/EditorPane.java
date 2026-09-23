@@ -26,6 +26,14 @@ public class EditorPane extends JLayeredPane {
         repaint();
         return component;
     }
+    @Override
+    public Component add(Component component, int position){
+        super.add(component);
+        setPosition(component, position);
+        revalidate();
+        repaint();
+        return component;
+    }
     
     public void removeComponent(JComponent component){
         this.remove(component);
