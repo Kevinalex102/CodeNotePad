@@ -23,6 +23,8 @@ public class NotepadForm extends javax.swing.JFrame {
      */
     public NotepadForm() {
         initComponents();
+        mainTextArea.setBackground(Color.WHITE);
+        mainTextArea.setForeground(Color.BLACK);
         editorPane.setBackgroundComponent(mainTextArea);
     }
 
