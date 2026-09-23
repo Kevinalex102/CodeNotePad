@@ -36,18 +36,23 @@ public class NotePadFile {
     }
     
     public static void save(NotepadForm form, ObjectNode textAreaJson){
-        if(currFolder == null){
+        if (currFolder == null){
             new NotePadFile(form.chooseFolder());
-        }
-        saveImages();
-        String data = saveJson(textAreaJson);
-        writeData(data);
+        } 
+        
+        if(currFolder != null){
+            saveImages();
+            String data = saveJson(textAreaJson);
+            writeData(data);
+        }   
     }
     
     public static void load(NotepadForm form, EditorPane editorPane){
         new NotePadFile(form.chooseFolder());
-        String data = readData();
-        loadFromData(data, editorPane, form);
+        if (currFolder != null){
+            String data = readData();
+            loadFromData(data, editorPane, form);
+        }
     }
     
     private static String saveJson(ObjectNode textAreaJson){
@@ -166,7 +171,9 @@ public class NotePadFile {
     }
     
     private File newNotePad(File folder){
-        this.folder = folder;
+        if (folder == null){
+            return null;
+        }
         new File(folder, "images").mkdir();
         File data = new File(folder, "data.json");
         try {
