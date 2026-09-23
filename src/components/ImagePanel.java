@@ -50,6 +50,17 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         this.id = idCounter;
         idCounter++;
         menu = new ComponentPopupMenu(this);
+        initialize();
+    }
+    
+    private ImagePanel(int id){
+        super();
+        this.id = id;
+        menu = new ComponentPopupMenu(this);
+        initialize();
+    }
+    
+    private void initialize(){
         MouseAdapter mouseHandler = new DragResizeMouseHandler(this, this);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
@@ -70,7 +81,13 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     
     public static ImagePanel createPanel(Instructions instructions){
         File file = ImageFile.readFile(instructions.file);
-        ImagePanel newImagePanel = new ImagePanel();
+        
+        ImagePanel newImagePanel;
+        if(instructions.id == null){
+            newImagePanel = new ImagePanel();
+        } else{
+            newImagePanel = new ImagePanel(instructions.id);
+        }
         
         newImagePanel.setBounds(instructions.pos_x, instructions.pos_y, instructions.width, instructions.height);
         newImagePanel.imageFile = new ImageFile(file, newImagePanel.id);

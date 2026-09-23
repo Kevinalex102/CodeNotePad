@@ -44,9 +44,19 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     private CodeArea(){
         super(10, 10);
         
-        this.id = idCounter;
-        idCounter++;
-        menu = new ComponentPopupMenu(this);
+        this.id = idCounter++;
+        this.menu = new ComponentPopupMenu(this);
+        initialize();
+    }
+    private CodeArea(int id){
+        super(10, 10);
+        
+        this.id = id;
+        this.menu = new ComponentPopupMenu(this);
+        initialize();
+    }
+    
+    private void initialize(){
         initializeMenu();
         MouseAdapter mouseHandler = new DragResizeMouseHandler(this, this);
         addMouseListener(mouseHandler);
@@ -79,7 +89,13 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     }
     
     public static CodeArea createArea(Instructions instructions){
-        CodeArea newCodeArea = new CodeArea();
+        CodeArea newCodeArea;
+        if (instructions.id == null){
+            newCodeArea = new CodeArea();
+        }
+        else {
+            newCodeArea = new CodeArea(instructions.id);
+        }
         
         newCodeArea.setBounds(instructions.pos_x, instructions.pos_y , instructions.width, instructions.height);
         newCodeArea.setBackground(instructions.bgColor);
