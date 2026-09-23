@@ -21,7 +21,6 @@ import javax.swing.*;
 public class CodeArea extends JTextArea implements IDragResizeMouseHandler, ComponentActions, ExportActions{
 
     private final int id;
-    private int pos_x, pos_y, width, height;
     private Color bgColor, fgColor;
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
@@ -73,10 +72,6 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         CodeArea newCodeArea = new CodeArea();
         
         newCodeArea.setBounds(100, 100, 250, 100);
-        newCodeArea.pos_x = 100;
-        newCodeArea.pos_y = 100;
-        newCodeArea.width = 250;
-        newCodeArea.height = 100;
         newCodeArea.setBackground(Color.gray);
         newCodeArea.setForeground(Color.white);
         
@@ -86,14 +81,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     public static CodeArea createArea(Instructions instructions){
         CodeArea newCodeArea = new CodeArea();
         
-        int x = instructions.pos_x;
-        int y = instructions.pos_y;
-        
-        newCodeArea.setBounds(x + 10, y + 10, instructions.width, instructions.height);
-        newCodeArea.pos_x = x + 10;
-        newCodeArea.pos_y = y + 10;
-        newCodeArea.width = instructions.width;
-        newCodeArea.height = instructions.height;
+        newCodeArea.setBounds(instructions.pos_x, instructions.pos_y , instructions.width, instructions.height);
         newCodeArea.setBackground(instructions.bgColor);
         newCodeArea.setForeground(instructions.fgColor);
         newCodeArea.setLocked(instructions.locked);
@@ -114,8 +102,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
 
     @Override
     public void cutComponent() {
-        ComponentEditor.copyComponent(this);
-        deleteComponent();
+        ComponentEditor.cutComponent(this);
     }
     
     @Override
@@ -148,22 +135,14 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     
     @Override
     public void resize(int newWidth, int newHeight){
-        width = newWidth;
-        height = newHeight;
-        
-        this.setBounds(pos_x, pos_y, newWidth, newHeight);
-        
+        this.setBounds(getX(), getY(), newWidth, newHeight);
         revalidate();
         repaint();
     }
     
     @Override
     public void moveTo(int x, int y) {
-        pos_x = x;
-        pos_y = y;
-        
         setLocation(x, y);
-        
         revalidate();
         repaint();
     }
@@ -193,18 +172,6 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         fgColor = color;
     }
     
-    public int getPosX(){
-        return pos_x;
-    }
-    public int getPosY(){
-        return pos_y;
-    }
-    public int getWidth(){
-        return width;
-    }
-    public int getHeight(){
-        return height;
-    }
     public Color getBg(){
         return bgColor;
     }

@@ -27,7 +27,6 @@ import net.coobird.thumbnailator.Thumbnails;
 public class ImagePanel extends JLabel implements IDragResizeMouseHandler, ComponentActions{
 
     private final int id;
-    private int pos_x, pos_y, width, height;
     private static int idCounter = 0;
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
@@ -49,8 +48,8 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     private ImagePanel(){
         super();
         this.id = idCounter;
-        menu = new ComponentPopupMenu(this);
         idCounter++;
+        menu = new ComponentPopupMenu(this);
         MouseAdapter mouseHandler = new DragResizeMouseHandler(this, this);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
@@ -64,11 +63,6 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         newImagePanel.setVisible(true);
         newImagePanel.imageFile = new ImageFile(file, newImagePanel.id);
         
-        newImagePanel.pos_x = 100;
-        newImagePanel.pos_y = 100;
-        newImagePanel.width = 300;
-        newImagePanel.height = 300;
-        
         newImagePanel.readImage();
         newImagePanel.image = newImagePanel.resizeImage(300, 300);
         return newImagePanel;
@@ -77,15 +71,9 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     public static ImagePanel createPanel(Instructions instructions){
         File file = ImageFile.readFile(instructions.file);
         ImagePanel newImagePanel = new ImagePanel();
-        int x = instructions.pos_x;
-        int y = instructions.pos_y;
         
-        newImagePanel.setBounds(x + 10, y + 10, instructions.width, instructions.height);
+        newImagePanel.setBounds(instructions.pos_x, instructions.pos_y, instructions.width, instructions.height);
         newImagePanel.imageFile = new ImageFile(file, newImagePanel.id);
-        newImagePanel.pos_x = x + 10;
-        newImagePanel.pos_y = y + 10;
-        newImagePanel.width = instructions.width;
-        newImagePanel.height = instructions.height;
         newImagePanel.setLocked(instructions.locked);
         newImagePanel.repaint();
         newImagePanel.setVisible(true);
@@ -113,10 +101,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     
     @Override
     public void resize(int newWidth, int newHeight){
-        width = newWidth;
-        height = newHeight;
-        
-        this.setBounds(pos_x, pos_y, newWidth, newHeight);
+        this.setBounds(getX(), getY(), newWidth, newHeight);
         readImage();
         this.image = resizeImage(newWidth, newHeight);
         
@@ -135,11 +120,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     
     @Override
     public void moveTo(int x, int y) {
-        pos_x = x;
-        pos_y = y;
-        
         setLocation(x, y);
-        
         revalidate();
         repaint();
     }
@@ -166,8 +147,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
 
     @Override
     public void cutComponent() {
-        ComponentEditor.copyComponent(this);
-        deleteComponent();
+        ComponentEditor.cutComponent(this);
     }
     
     @Override
@@ -186,20 +166,6 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         ComponentEditor.pushup(this);
     }
 
-    public int getPosX() {
-        return pos_x;
-    }
-
-    public int getPosY() {
-        return pos_y;
-    }
-    
-    public int getWidth(){
-        return width;
-    }
-    public int getHeight(){
-        return height;
-    }
     public String getPath() {
         return imageFile.getFile().toString();
     }

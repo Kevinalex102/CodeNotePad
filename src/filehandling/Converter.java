@@ -53,8 +53,8 @@ public class Converter {
         Color fg = component.getFg();
 
         node.put("text", component.getText());
-        node.put("pos_x", component.getPosX());
-        node.put("pos_y", component.getPosY());
+        node.put("pos_x", component.getX());
+        node.put("pos_y", component.getY());
         node.put("width", component.getWidth());
         node.put("height", component.getHeight());
         node.put("bgColor", bg.getRGB());
@@ -85,8 +85,8 @@ public class Converter {
         ObjectNode node = mapper.createObjectNode();
 
         node.put("file", component.getPath());
-        node.put("pos_x", component.getPosX());
-        node.put("pos_y", component.getPosY());
+        node.put("pos_x", component.getX());
+        node.put("pos_y", component.getY());
         node.put("width", component.getWidth());
         node.put("height", component.getHeight());
         if(copying){
@@ -138,6 +138,11 @@ public class Converter {
         Integer id = null;
         int layer = 0;
         
+        if(pasting){
+            pos_x += 10;
+            pos_y += 10;
+        }
+        
         if(!pasting) {
             id = node.get("id").asInt();
             layer = node.get("layer").asInt();
@@ -164,6 +169,11 @@ public class Converter {
         
         Integer id = null;
         int layer = 0;
+        
+        if(pasting){
+            pos_x += 10;
+            pos_y += 10;
+        }
         
         if(!pasting) {
             id = node.get("id").asInt();
