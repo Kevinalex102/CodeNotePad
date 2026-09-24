@@ -20,6 +20,7 @@ public class DragResizeMouseHandler extends MouseAdapter {
     private final JComponent component;
     private final IDragResizeMouseHandler target;
     private boolean resizing = false;
+    private boolean resized;
     private Point mouseOffset;
     
     public DragResizeMouseHandler(JComponent component, IDragResizeMouseHandler target) {
@@ -34,6 +35,7 @@ public class DragResizeMouseHandler extends MouseAdapter {
             resizing = 
                 mouseOffset.x > component.getWidth() - 10 && 
                 mouseOffset.y > component.getHeight() - 10;
+            resized = false;
         } else if(SwingUtilities.isRightMouseButton(e)){
             target.showMenu(e.getX(), e.getY());
         }
@@ -59,6 +61,7 @@ public class DragResizeMouseHandler extends MouseAdapter {
                 Math.max(newWidth, 50),
                 Math.max(newHeight, 50)
             );
+            resized = true;
         } else {
             int x = parentPoint.x - mouseOffset.x;
             int y = parentPoint.y - mouseOffset.y;
@@ -71,6 +74,11 @@ public class DragResizeMouseHandler extends MouseAdapter {
     
     @Override
     public void mouseReleased(MouseEvent e) {
+        if (resized) {
+        target.resizeFinished();
+        }
+        resized = false;
+        resizing = false;
         mouseOffset = null;
     }
 }

@@ -113,14 +113,23 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     protected void paintComponent(Graphics g) {
         super.paintComponent(g); 
         
-        g.drawImage(image, 0, 0, null);
+        if (image == null) {
+            return;
+        }
+
+        g.drawImage(
+            image,
+            0,
+            0,
+            getWidth(),
+            getHeight(),
+            null
+        );
     }
     
     @Override
     public void resize(int newWidth, int newHeight){
         this.setBounds(getX(), getY(), newWidth, newHeight);
-        readImage();
-        this.image = resizeImage(newWidth, newHeight);
         
         revalidate();
         repaint();
@@ -133,6 +142,14 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
             System.getLogger(ImagePanel.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         return null;
+    }
+    
+    @Override
+    public void resizeFinished(){
+        readImage();
+        image = resizeImage(getWidth(), getHeight());
+        revalidate();
+        repaint();
     }
     
     @Override
