@@ -9,16 +9,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import components.CodeArea;
-import components.EditorPane;
-import components.ImagePanel;
+import components.*;
 import static filehandling.Converter.toJsonNode;
 import forms.NotepadForm;
 import java.awt.Color;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 /**
  *
@@ -37,7 +32,7 @@ public class NotePadFile {
     
     public static void save(NotepadForm form, ObjectNode textAreaJson){
         if (currFolder == null){
-            new NotePadFile(form.chooseFolder());
+            new NotePadFile(form.createFolder());
         } 
         
         if(currFolder != null){
@@ -136,21 +131,22 @@ public class NotePadFile {
         try {
             ObjectNode node = (ObjectNode) new ObjectMapper().readTree(data);
             
+            //mainTextArea
             JsonNode mainTextAreaNode = node.get("mainTextArea");
-            
             String text = mainTextAreaNode.get("text").asText();
             Color bgColor = new Color(mainTextAreaNode.get("bgColor").asInt());
             Color fgColor = new Color(mainTextAreaNode.get("fgColor").asInt());
             boolean bold = mainTextAreaNode.get("bold").asBoolean();
-            boolean italic = mainTextAreaNode.get("italic").asBoolean();
-            
+            boolean italic = mainTextAreaNode.get("italic").asBoolean();            
             form.loadTextArea(text, bgColor, fgColor, bold, italic);
             
+            //IdCounters
             CodeArea.resetHashMap();
             CodeArea.setIdCounter(node.get("codeAreasIdCounter").asInt());
             ImagePanel.resetHashMap();
             ImagePanel.setIdCounter(node.get("imagesIdCounter").asInt());
             
+            //CodeAreas
             ArrayNode codeAreasNode = (ArrayNode) node.get("codeAreas");
             for(JsonNode codeAreaNode: codeAreasNode){
                 String jsonString = new ObjectMapper().writeValueAsString(codeAreaNode);
@@ -158,6 +154,7 @@ public class NotePadFile {
                 editorPane.add(CodeArea.createArea(instructions), instructions.layer());
             }
             
+            //ImagePanels
             ArrayNode imagesNode = (ArrayNode) node.get("images");
             for(JsonNode imageNode: imagesNode){
                 String jsonString = new ObjectMapper().writeValueAsString(imageNode);
@@ -174,7 +171,7 @@ public class NotePadFile {
         if (folder == null){
             return null;
         }
-        new File(folder, "images").mkdir();
+        new File(folder, "images").mkdirs();
         File data = new File(folder, "data.json");
         try {
             data.createNewFile();

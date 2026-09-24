@@ -9,6 +9,7 @@ import components.*;
 import java.awt.*;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -352,7 +353,7 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newFileActionPerformed
         // TODO add your handling code here:
-        new NotePadFile(chooseFolder());
+        new NotePadFile(createFolder());
     }//GEN-LAST:event_btn_newFileActionPerformed
 
     private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
@@ -400,6 +401,24 @@ public class NotepadForm extends javax.swing.JFrame {
         else {
           System.out.println("No Selection ");
         }
+        return null;
+    }
+    
+    public File createFolder(){
+        File selectedDirectory = chooseFolder();
+        if(selectedDirectory == null){
+            return null;
+        }
+        String DirectoryName = JOptionPane.showInputDialog(
+            null, 
+            "Digite o nome da nova pasta:", 
+            "Nome da Pasta", 
+            JOptionPane.QUESTION_MESSAGE
+        );
+        if (DirectoryName != null && !DirectoryName.trim().isEmpty()){
+            File newFolder = new File(selectedDirectory, DirectoryName.trim());
+            return newFolder;
+        } 
         return null;
     }
     
