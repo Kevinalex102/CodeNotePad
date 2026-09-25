@@ -137,8 +137,9 @@ public class NotePadFile {
             Color bgColor = new Color(mainTextAreaNode.get("bgColor").asInt());
             Color fgColor = new Color(mainTextAreaNode.get("fgColor").asInt());
             boolean bold = mainTextAreaNode.get("bold").asBoolean();
-            boolean italic = mainTextAreaNode.get("italic").asBoolean();            
-            form.loadTextArea(text, bgColor, fgColor, bold, italic);
+            boolean italic = mainTextAreaNode.get("italic").asBoolean();
+            String font = mainTextAreaNode.get("font").asText();
+            form.loadTextArea(text, bgColor, fgColor, bold, italic, font);
             
             //IdCounters
             CodeArea.resetHashMap();

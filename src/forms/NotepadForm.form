@@ -151,13 +151,7 @@
             <Component class="javax.swing.JComboBox" name="comboBox_font">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="5">
-                    <StringItem index="0" value="Arial"/>
-                    <StringItem index="1" value="Arial black"/>
-                    <StringItem index="2" value="Calibri"/>
-                    <StringItem index="3" value="Comic Sans"/>
-                    <StringItem index="4" value="Times New Roman"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
               <AuxValues>

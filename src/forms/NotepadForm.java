@@ -6,8 +6,12 @@ package forms;
 
 import filehandling.*;
 import components.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ItemEvent;
 import java.io.File;
+import java.util.*;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
@@ -27,6 +31,37 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTextArea.setBackground(Color.WHITE);
         mainTextArea.setForeground(Color.BLACK);
         editorPane.setBackgroundComponent(mainTextArea);
+        initializeFonts();
+    }
+    
+    private void initializeFonts(){
+        loadAvailableFonts();
+        comboBox_font.addItemListener((ItemEvent ie) -> {
+            if (ie.getStateChange() == ItemEvent.SELECTED){
+                changeFontFamily();
+            }
+        });
+        comboBox_font.setSelectedItem("Segoe UI");
+    }
+    
+    private void changeFontFamily(){
+        Font oldFont = mainTextArea.getFont();
+        Font newFont = new Font(
+                comboBox_font.getSelectedItem().toString(),
+                oldFont.getStyle(),
+                oldFont.getSize()
+        );
+        mainTextArea.setFont(newFont);
+    }
+    
+    private void changeFontFamily(String fontFamily){
+        Font oldFont = mainTextArea.getFont();
+        Font newFont = new Font(
+                fontFamily,
+                oldFont.getStyle(),
+                oldFont.getSize()
+        );
+        mainTextArea.setFont(newFont);
     }
 
     /**
@@ -79,8 +114,6 @@ public class NotepadForm extends javax.swing.JFrame {
                 checkBox_italicActionPerformed(evt);
             }
         });
-
-        comboBox_font.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Arial", "Arial black", "Calibri", "Comic Sans", "Times New Roman" }));
 
         label_font.setText("Fonte");
 
@@ -443,7 +476,7 @@ public class NotepadForm extends javax.swing.JFrame {
         return null;
     }
     
-    public void loadTextArea(String text, Color bgColor, Color fgColor, boolean bold, boolean italic){
+    public void loadTextArea(String text, Color bgColor, Color fgColor, boolean bold, boolean italic, String fontFamily){
         editorPane.removeAll();
         mainTextArea.setText(text);
         mainTextArea.setBackground(bgColor);
@@ -456,6 +489,26 @@ public class NotepadForm extends javax.swing.JFrame {
         if(bold)fontInt++;
         if(italic)fontInt+=2;
         mainTextArea.setFont(font.deriveFont(fontInt));
+        changeFontFamily(fontFamily);
+    }
+    
+    private void loadAvailableFonts(){
+        GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+        String[] defaultFonts = {"Arial", "Calibri", "Segoe UI", "Times New Roman"};
+        HashSet<String> fontsSet = new HashSet<>(Arrays.asList(ge.getAvailableFontFamilyNames()));
+        
+        for(String font : defaultFonts){
+            if(fontsSet.contains(font)){
+                fontsSet.remove(font);
+                comboBox_font.addItem(font);
+            }
+        }
+        java.util.List<String> sortedFonts = new ArrayList<>(fontsSet);
+        Collections.sort(sortedFonts);
+        
+        for (String font : sortedFonts){
+            comboBox_font.addItem(font);
+        }
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

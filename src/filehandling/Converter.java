@@ -112,6 +112,7 @@ public class Converter {
         node.put("fgColor", fg.getRGB());
         node.put("bold", currFont.isBold());
         node.put("italic", currFont.isItalic());
+        node.put("font", currFont.getFamily());
 
         return node;
     }
