@@ -353,7 +353,13 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void btn_newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newFileActionPerformed
         // TODO add your handling code here:
-        new NotePadFile(createFolder());
+        File newFolder = createFolder();
+        if(newFolder == null) return;
+        
+        new NotePadFile(newFolder);
+        CodeFile.clearCache();
+        ImageFile.clearCache(ImageFile.getImagesFolder());
+        editorPane.removeAll();
     }//GEN-LAST:event_btn_newFileActionPerformed
 
     private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
