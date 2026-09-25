@@ -17,70 +17,81 @@ import java.nio.file.*;
 public class CodeFile {
     
     private String text;
-    private File file;
-    
-    public File getFile() {
-        return file;
-    }
+    private final File file;
+    private static Path tempPath = null;
     
     public CodeFile(String text, int id, String type)
     {
-        Path tempPath = Paths.get("src/temp/codeFiles");
-        tempPath = tempPath.toAbsolutePath();
+        if(tempPath == null){
+            initializeTempPath();
+        }
+        
         this.file = new File(tempPath + "/code" + id + type);
         this.text = text;
         write();
     }
     
-    public void write(){
+    private static void initializeTempPath(){
         try{
-        FileWriter writer = new FileWriter(file);
-        writer.write(text);
-        writer.close();
+            tempPath = Path.of(
+                System.getProperty("java.io.tmpdir"),
+                "CodeNotePad",
+                "codeFiles"
+            );
+            Files.createDirectories(tempPath);
         }
-        catch(IOException e)
+        catch(IOException ex){
+            throw new RuntimeException("Could not create temp path", ex);
+        }
+    }
+    
+    private void write(){
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(text);
+        }
+        catch(IOException ex)
         {
-            e.printStackTrace();
+            throw new RuntimeException("Could write to file: " + file.toString(), ex);
         }
     }
     
     public void write(String newText){
-        text = newText;
-        try{
-        FileWriter writer = new FileWriter(file);
-        writer.write(newText);
-        writer.close();
+        try (FileWriter writer = new FileWriter(file)) {
+            writer.write(newText);
+            text = newText;
         }
-        catch(IOException e)
+        catch(IOException ex)
         {
-            e.printStackTrace();
+            throw new RuntimeException("Could write to file: " + file.toString(), ex);
         }
     }
+    
     public void openWith(){
         if (Desktop.isDesktopSupported()) {
             try {
                 Desktop.getDesktop().open(file);
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException ex) {
+                throw new RuntimeException("Could not open: " + file.toString(), ex);
             }
         } else {
+            throw new RuntimeException("File format not supported");
         }
     }
     
     public static void clearCache(){
-        Path tempPath = Paths.get("src/temp/codeFiles");
-        tempPath = tempPath.toAbsolutePath();
         File folder = tempPath.toFile();
         try{
             for(File file:folder.listFiles()){
-                if (!file.getName().equals(".gitkeep")) {
-                    file.delete();
-                }
+                Files.delete(file.toPath());
             }
         }
-        catch(Exception e)
+        catch(IOException ex)
         {
-            e.printStackTrace();
+            throw new RuntimeException("Could not clear cache");
         }
+    }
+    
+    public File getFile() {
+        return file;
     }
 }

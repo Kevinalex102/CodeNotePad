@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import javax.imageio.ImageIO;
 
@@ -20,9 +19,27 @@ import javax.imageio.ImageIO;
 public class ImageFile {
     
     private File file;
+    private static Path tempPath = null;
     
     public ImageFile(File file, int id){
+        if(tempPath == null){
+            initializeTempPath();
+        }
         this.file = ImageFile.copyFile(file, id);
+    }
+    
+    private static void initializeTempPath(){
+        try{
+            tempPath = Path.of(
+                System.getProperty("java.io.tmpdir"),
+                "CodeNotePad",
+                "images"
+            );
+            Files.createDirectories(tempPath);
+        }
+        catch(IOException ex){
+            throw new RuntimeException("Could not create temp path", ex);
+        }
     }
     
     private static String getType(Path path){
@@ -35,8 +52,8 @@ public class ImageFile {
             else{
                 return null;
             }
-        } catch (IOException e) {
-            return null;
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not get image type", ex);
         }
     }
     
@@ -47,11 +64,10 @@ public class ImageFile {
         
         Path imagesPath = getImagesFolder().toPath();
         imagesPath = Path.of(imagesPath.toString(), "/image" + id + type);
-        imagesPath = imagesPath.toAbsolutePath();
         try {
             newFile = Files.copy(oldPath, imagesPath, StandardCopyOption.REPLACE_EXISTING).toFile();
-        } catch (IOException e) {
-            return null;
+        } catch (IOException ex) {
+            throw new RuntimeException("Could not copy image: " + oldFile.toString(), ex);
         }
         
         return newFile;
@@ -64,12 +80,11 @@ public class ImageFile {
         
         Path newPath = newFolder.toPath();
         newPath = Path.of(newPath.toString(), "/" + name);
-        newPath = newPath.toAbsolutePath();
         try {
-            this.file = newPath.toFile();
             newFile = Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING).toFile();
-        } catch (IOException e) {
-            return null;
+            this.file = newPath.toFile();
+        } catch (IOException ex) {
+             throw new RuntimeException("Could not copy image: " + oldPath.toString(), ex);
         }
         
         return newFile;
@@ -97,22 +112,18 @@ public class ImageFile {
     }
     
     public static File getImagesFolder(){
-        Path imagesPath = Paths.get("src/temp/images");
-        imagesPath = imagesPath.toAbsolutePath();
-        return imagesPath.toFile();
+        return tempPath.toFile();
     }
     
     public static void clearCache(File folder){
         try{
             for(File file:folder.listFiles()){
-                if (!file.getName().equals(".gitkeep")) {
-                    file.delete();
-                }
+                Files.delete(file.toPath());
             }
         }
-        catch(Exception e)
+        catch(IOException ex)
         {
-            e.printStackTrace();
+            throw new RuntimeException("Could not clear cache", ex);
         }
     }
 }
