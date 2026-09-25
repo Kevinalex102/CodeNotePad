@@ -79,6 +79,10 @@ public class CodeFile {
     }
     
     public static void clearCache(){
+        if (tempPath == null){
+            return;
+        }
+        
         File folder = tempPath.toFile();
         try{
             for(File file:folder.listFiles()){

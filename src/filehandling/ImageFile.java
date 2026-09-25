@@ -112,6 +112,9 @@ public class ImageFile {
     }
     
     public static File getImagesFolder(){
+        if(tempPath == null){
+            initializeTempPath();
+        }
         return tempPath.toFile();
     }
     
