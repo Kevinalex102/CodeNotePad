@@ -86,6 +86,7 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         });
         comboBox_font.setSelectedItem("Arial");
+        changeFontFamily();
     }
     
     private void changeFontFamily(){
