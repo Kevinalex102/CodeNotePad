@@ -49,8 +49,8 @@ public class Converter {
 
         ObjectNode node = mapper.createObjectNode();
         
-        Color bg = component.getBg();
-        Color fg = component.getFg();
+        Color bg = component.getBackground();
+        Color fg = component.getForeground();
 
         node.put("text", component.getText());
         node.put("pos_x", component.getX());

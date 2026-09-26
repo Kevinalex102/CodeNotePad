@@ -21,7 +21,6 @@ import javax.swing.*;
 public class CodeArea extends JTextArea implements IDragResizeMouseHandler, ComponentActions, ExportActions{
 
     private final int id;
-    private Color bgColor, fgColor;
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
     private CodeFile textFile = null;
@@ -179,21 +178,13 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     @Override
     public void setBackground(Color color){
         super.setBackground(color);
-        bgColor = color;
     }
     
     @Override
     public void setForeground(Color color){
         super.setForeground(color);
-        fgColor = color;
     }
     
-    public Color getBg(){
-        return bgColor;
-    }
-    public Color getFg(){
-        return fgColor;
-    }
     @Override
     public boolean isLocked() {
         return isLocked;
