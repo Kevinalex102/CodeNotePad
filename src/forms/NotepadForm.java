@@ -6,14 +6,15 @@ package forms;
 
 import filehandling.*;
 import components.*;
+import editing.ComponentEditor;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
-import java.awt.event.ItemEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.util.*;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
+import menus.TextMenuItems;
 
 /**
  *
@@ -22,16 +23,59 @@ import javax.swing.JOptionPane;
 public class NotepadForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NotepadForm.class.getName());
+    private final JPopupMenu menu;
 
     /**
      * Creates new form NotepadForm
      */
     public NotepadForm() {
         initComponents();
-        mainTextArea.setBackground(Color.WHITE);
-        mainTextArea.setForeground(Color.BLACK);
+        initializeMainTextArea();
         editorPane.setBackgroundComponent(mainTextArea);
         initializeFonts();
+        menu = new JPopupMenu();
+        initializeMenu();
+    }
+    
+    private void initializeMenu(){
+        JMenuItem changeBackground = new JMenuItem("Mudar cor do fundo");
+        JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
+        JMenuItem bold = new JMenuItem("Negrito");
+        JMenuItem italic = new JMenuItem("Itálico");
+        JMenuItem paste = new JMenuItem("Colar componente");
+        
+        changeBackground.addActionListener(e -> changeBackground());
+        changeForeground.addActionListener(e -> changeForeground());
+        bold.addActionListener(e -> changeFontStyle(Font.BOLD));
+        italic.addActionListener(e -> changeFontStyle(Font.ITALIC));
+        paste.addActionListener(e -> ComponentEditor.pasteComponent(editorPane));
+        
+        TextMenuItems.addTo(menu, mainTextArea);
+        menu.add(bold);
+        menu.add(italic);
+        menu.addSeparator();
+        menu.add(changeBackground);
+        menu.add(changeForeground);
+        menu.addSeparator();
+        menu.add(paste);
+    }
+    
+    private void initializeMainTextArea(){
+        mainTextArea.setBackground(Color.WHITE);
+        mainTextArea.setForeground(Color.BLACK);
+        
+        mainTextArea.addMouseListener(new MouseAdapter(){
+            @Override
+            public void mousePressed(MouseEvent e){
+                if(SwingUtilities.isRightMouseButton(e)){
+                    showMenu(e.getX(), e.getY());
+                }
+            }
+        });
+    }
+    
+    private void showMenu(int x, int y){
+        menu.show(mainTextArea, x, y);
     }
     
     private void initializeFonts(){
@@ -41,7 +85,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 changeFontFamily();
             }
         });
-        comboBox_font.setSelectedItem("Segoe UI");
+        comboBox_font.setSelectedItem("Arial");
     }
     
     private void changeFontFamily(){
@@ -311,57 +355,70 @@ public class NotepadForm extends javax.swing.JFrame {
 
     private void checkBox_boldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_boldActionPerformed
         // TODO add your handling code here:
-        
-        Font currFont = mainTextArea.getFont();
-        if (currFont.isBold()){
-            if(currFont.isItalic()){
-                mainTextArea.setFont(currFont.deriveFont(Font.ITALIC));
-            }
-            else{
-                mainTextArea.setFont(currFont.deriveFont(Font.PLAIN));    
-            }
-        }
-        else if(currFont.isItalic()){
-            mainTextArea.setFont(currFont.deriveFont(Font.ITALIC + Font.BOLD));
-        }
-        else{
-            mainTextArea.setFont(currFont.deriveFont(Font.BOLD));
-        }
+        changeFontStyle(Font.BOLD);
     }//GEN-LAST:event_checkBox_boldActionPerformed
-
+    
     private void checkBox_italicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_italicActionPerformed
         // TODO add your handling code here:
-        Font currFont = mainTextArea.getFont();
-        if (currFont.isBold()){
-            if(currFont.isItalic()){
-                mainTextArea.setFont(currFont.deriveFont(Font.BOLD));
-            }
-            else{
-                mainTextArea.setFont(currFont.deriveFont(Font.ITALIC + Font.BOLD));    
-            }
-        }
-        else if(currFont.isItalic()){
-            mainTextArea.setFont(currFont.deriveFont(Font.PLAIN));
-        }
-        else{
-            mainTextArea.setFont(currFont.deriveFont(Font.ITALIC));
-        }
+        changeFontStyle(Font.ITALIC);
     }//GEN-LAST:event_checkBox_italicActionPerformed
+
+    private void changeFontStyle(int style) {
+        Font currentFont = mainTextArea.getFont();
+
+        boolean bold = currentFont.isBold();
+        boolean italic = currentFont.isItalic();
+
+        switch (style) {
+            case 0 -> {
+                bold = false;
+                italic = false;
+            }
+            case 1 -> bold = !bold;
+            case 2 -> italic = !italic;
+            case 3 -> {
+                bold = true;
+                italic = true;
+            }
+        }
+
+        int newStyle = Font.PLAIN;
+
+        if (bold) {
+            newStyle |= Font.BOLD;
+        }
+
+        if (italic) {
+            newStyle |= Font.ITALIC;
+        }
+        checkBox_bold.setSelected(bold);
+        checkBox_italic.setSelected(italic);
+
+        mainTextArea.setFont(currentFont.deriveFont(newStyle));
+    }
 
     private void btn_textColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_textColorActionPerformed
         // TODO add your handling code here:
+        changeForeground();
+    }//GEN-LAST:event_btn_textColorActionPerformed
+
+    private void changeForeground(){
         Color newColor = (ColorPicker.pickAColor(mainTextArea.getForeground()));
         mainTextArea.setForeground(newColor);
         btn_textColor.setBackground(newColor);
-    }//GEN-LAST:event_btn_textColorActionPerformed
-
+    }
+    
     private void btn_bgColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bgColorActionPerformed
         // TODO add your handling code here:
+        changeBackground();
+    }//GEN-LAST:event_btn_bgColorActionPerformed
+
+    private void changeBackground(){
         Color newColor = (ColorPicker.pickAColor(mainTextArea.getBackground()));
         mainTextArea.setBackground(newColor);
         btn_bgColor.setBackground(newColor);
-    }//GEN-LAST:event_btn_bgColorActionPerformed
-
+    }
+    
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));;
         CodeFile.clearCache();
@@ -483,18 +540,14 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_bgColor.setBackground(bgColor);
         mainTextArea.setForeground(fgColor);
         btn_textColor.setBackground(fgColor);
-        
-        Font font = mainTextArea.getFont();
-        int fontInt = 0;
-        if(bold)fontInt++;
-        if(italic)fontInt+=2;
-        mainTextArea.setFont(font.deriveFont(fontInt));
+        if(bold)changeFontStyle(Font.BOLD);
+        if(italic)changeFontStyle(Font.ITALIC);
         changeFontFamily(fontFamily);
     }
     
     private void loadAvailableFonts(){
         GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-        String[] defaultFonts = {"Arial", "Calibri", "Segoe UI", "Times New Roman"};
+        String[] defaultFonts = {"Arial", "Calibri", "Comic Sans MS", "Times New Roman"};
         HashSet<String> fontsSet = new HashSet<>(Arrays.asList(ge.getAvailableFontFamilyNames()));
         
         for(String font : defaultFonts){
