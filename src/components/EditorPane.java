@@ -5,6 +5,7 @@
 package components;
 
 import java.awt.Component;
+import java.util.HashMap;
 import javax.swing.*;
 
 /**
@@ -13,6 +14,9 @@ import javax.swing.*;
  */
 public class EditorPane extends JLayeredPane {
     
+    public static HashMap<Integer, CodeArea> codeAreas = new HashMap<>();
+    public static HashMap<Integer, ImagePanel> images = new HashMap<>();
+    private static int IdCounter = 0;
     private JTextArea backgroundComponent;
 
     public EditorPane() {
@@ -71,4 +75,24 @@ public class EditorPane extends JLayeredPane {
         setBackgroundComponent(backgroundComponent);
         doLayout();
     }
+    
+    public static int getIdCounter(){
+        return IdCounter;
+    }
+    
+    public static void setIdCounter(int id){
+        IdCounter = id;
+    }
+    
+    public static int newId(){
+        int id = IdCounter;
+        IdCounter++;
+        return id;
+    }
+    
+    public static void resetHashMaps(){
+        codeAreas.clear();
+        images.clear();
+    }
+    
 }

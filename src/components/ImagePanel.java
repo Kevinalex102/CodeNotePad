@@ -14,7 +14,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import menus.ComponentPopupMenu;
@@ -27,12 +26,10 @@ import net.coobird.thumbnailator.Thumbnails;
 public class ImagePanel extends JLabel implements IDragResizeMouseHandler, ComponentActions{
 
     private final int id;
-    private static int idCounter = 0;
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
     private BufferedImage image;
     private ImageFile imageFile;
-    public static HashMap<Integer, ImagePanel> images = new HashMap<>();
     
     public record Instructions(
         String file, 
@@ -47,8 +44,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     
     private ImagePanel(){
         super();
-        this.id = idCounter;
-        idCounter++;
+        this.id = EditorPane.newId();
         menu = new ComponentPopupMenu(this);
         initialize();
     }
@@ -64,7 +60,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         MouseAdapter mouseHandler = new DragResizeMouseHandler(this, this);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
-        images.put(this.id, this);
+        EditorPane.images.put(this.id, this);
     }
     
     public static ImagePanel createPanel(File file){
@@ -186,7 +182,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     
     @Override
     public void deleteComponent() {
-        images.remove(this.id);
+        EditorPane.images.remove(this.id);
         ComponentEditor.deleteComponent(this);
     }
 
@@ -210,16 +206,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
         EditorPane parent = (EditorPane) this.getParent();
         return parent.getPosition(this);
     }
-    public static int getIdCounter(){
-        return idCounter;
-    }
     public ImageFile getImageFile(){
         return imageFile;
-    }
-    public static void setIdCounter(int value){
-        idCounter = value;
-    }
-    public static void resetHashMap(){
-        images.clear();
     }
 }

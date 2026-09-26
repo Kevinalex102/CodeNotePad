@@ -55,12 +55,11 @@ public class NotePadFile {
 
         try {
             node.set("mainTextArea", textAreaJson);
-            node.put("codeAreasIdCounter", CodeArea.getIdCounter());
-            node.put("imagesIdCounter", ImagePanel.getIdCounter());
+            node.put("idCounter", EditorPane.getIdCounter());
 
             ArrayNode codeAreas = mapper.createArrayNode();
 
-            CodeArea.codeAreas.forEach((k, v) -> {
+            EditorPane.codeAreas.forEach((k, v) -> {
                 codeAreas.add(toJsonNode(v, false));
             });
 
@@ -68,7 +67,7 @@ public class NotePadFile {
 
             ArrayNode images = mapper.createArrayNode();
 
-            ImagePanel.images.forEach((k, v) -> {
+            EditorPane.images.forEach((k, v) -> {
                 images.add(toJsonNode(v, false));
             });
 
@@ -116,7 +115,7 @@ public class NotePadFile {
         File newFolder = new File(currFolder, "images");
         ImageFile.clearCache(newFolder);
         try{
-            for(ImagePanel imagePanel: ImagePanel.images.values()){
+            for(ImagePanel imagePanel: EditorPane.images.values()){
                 ImageFile file = imagePanel.getImageFile();
                 file.copyFile(newFolder);
             }
@@ -141,11 +140,9 @@ public class NotePadFile {
             String font = mainTextAreaNode.get("font").asText();
             form.loadTextArea(text, bgColor, fgColor, bold, italic, font);
             
-            //IdCounters
-            CodeArea.resetHashMap();
-            CodeArea.setIdCounter(node.get("codeAreasIdCounter").asInt());
-            ImagePanel.resetHashMap();
-            ImagePanel.setIdCounter(node.get("imagesIdCounter").asInt());
+            //IdCounter
+            EditorPane.resetHashMaps();
+            EditorPane.setIdCounter(node.get("idCounter").asInt());
             
             //CodeAreas
             ArrayNode codeAreasNode = (ArrayNode) node.get("codeAreas");

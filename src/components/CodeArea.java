@@ -11,7 +11,6 @@ import handlers.*;
 import actions.*;
 import editing.ComponentEditor;
 import menus.*;
-import java.util.HashMap;
 import javax.swing.*;
 
 /**
@@ -24,8 +23,6 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
     private CodeFile textFile = null;
-    private static int idCounter = 0;
-    public static HashMap<Integer, CodeArea> codeAreas = new HashMap<>();
     
     public record Instructions(
         String text, 
@@ -43,7 +40,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     private CodeArea(){
         super(10, 10);
         
-        this.id = idCounter++;
+        this.id = EditorPane.newId();
         this.menu = new ComponentPopupMenu(this);
         initialize();
     }
@@ -60,7 +57,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         MouseAdapter mouseHandler = new DragResizeMouseHandler(this, this);
         addMouseListener(mouseHandler);
         addMouseMotionListener(mouseHandler);
-        codeAreas.put(this.id, this);
+        EditorPane.codeAreas.put(this.id, this);
     }
     
     private void initializeMenu(){
@@ -122,7 +119,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     
     @Override
     public void deleteComponent() {
-        codeAreas.remove(this.id);
+        EditorPane.codeAreas.remove(this.id);
         ComponentEditor.deleteComponent(this);
     }
     
@@ -176,16 +173,6 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     }
     
     @Override
-    public void setBackground(Color color){
-        super.setBackground(color);
-    }
-    
-    @Override
-    public void setForeground(Color color){
-        super.setForeground(color);
-    }
-    
-    @Override
     public boolean isLocked() {
         return isLocked;
     }
@@ -195,14 +182,5 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     public int getLayer(){
         EditorPane parent = (EditorPane) this.getParent();
         return parent.getPosition(this);
-    }
-    public static int getIdCounter(){
-        return idCounter;
-    }
-    public static void setIdCounter(int value){
-        idCounter = value;
-    }
-    public static void resetHashMap(){
-        codeAreas.clear();
     }
 }
