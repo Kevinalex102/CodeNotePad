@@ -4,8 +4,8 @@
  */
 package forms;
 
+import dialogs.*;
 import filehandling.*;
-import components.*;
 import editing.ComponentEditor;
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +16,8 @@ import java.util.*;
 import javax.swing.*;
 import menus.TextMenuItems;
 import com.formdev.flatlaf.*;
+import components.CodeArea;
+import components.ImagePanel;
 
 /**
  *
@@ -415,19 +417,19 @@ public class NotepadForm extends javax.swing.JFrame {
     }
 
     private void changeForeground(){
-        Color newColor = (ColorPicker.pickAColor(mainTextArea.getForeground()));
+        Color newColor = ColorPicker.pickAColor();
         mainTextArea.setForeground(newColor);
         btn_textColor.setBackground(newColor);
     }
     
     private void changeBackground(){
-        Color newColor = ColorPicker.pickAColor(mainTextArea.getBackground());
+        Color newColor = ColorPicker.pickAColor();
         mainTextArea.setBackground(newColor);
         btn_bgColor.setBackground(newColor);
 }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));;
+        if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));
         TemporaryStorage.clearCache();
     }//GEN-LAST:event_formWindowClosing
 

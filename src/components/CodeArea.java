@@ -4,6 +4,7 @@
  */
 package components;
 
+import dialogs.ColorPicker;
 import filehandling.CodeFile;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
@@ -165,11 +166,11 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     }
     
     public void changeBackground() {
-        this.setBackground(ColorPicker.pickAColor(this.getBackground()));
+        this.setBackground(ColorPicker.pickAColor());
     }
 
     private void changeForeground() {
-        this.setForeground(ColorPicker.pickAColor(this.getForeground()));
+        this.setForeground(ColorPicker.pickAColor());
     }
     
     @Override
