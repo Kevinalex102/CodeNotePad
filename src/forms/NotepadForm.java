@@ -422,8 +422,7 @@ public class NotepadForm extends javax.swing.JFrame {
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));;
-        CodeFile.clearCache();
-        ImageFile.clearCache(ImageFile.getImagesFolder());
+        TemporaryStorage.clearCache();
     }//GEN-LAST:event_formWindowClosing
 
     private boolean showSaveDialog(){
@@ -448,8 +447,7 @@ public class NotepadForm extends javax.swing.JFrame {
         if(newFolder == null) return;
         
         new NotePadFile(newFolder);
-        CodeFile.clearCache();
-        ImageFile.clearCache(ImageFile.getImagesFolder());
+        TemporaryStorage.clearCache();
         editorPane.removeAll();
     }//GEN-LAST:event_btn_newFileActionPerformed
 

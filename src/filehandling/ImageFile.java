@@ -19,27 +19,9 @@ import javax.imageio.ImageIO;
 public class ImageFile {
     
     private File file;
-    private static Path tempPath = null;
     
     public ImageFile(File file, int id){
-        if(tempPath == null){
-            initializeTempPath();
-        }
         this.file = ImageFile.copyFile(file, id);
-    }
-    
-    private static void initializeTempPath(){
-        try{
-            tempPath = Path.of(
-                System.getProperty("java.io.tmpdir"),
-                "CodeNotePad",
-                "images"
-            );
-            Files.createDirectories(tempPath);
-        }
-        catch(IOException ex){
-            throw new RuntimeException("Could not create temp path", ex);
-        }
     }
     
     private static String getType(Path path){
@@ -62,7 +44,7 @@ public class ImageFile {
         Path oldPath = oldFile.toPath();
         String type = getType(oldPath);
         
-        Path imagesPath = getImagesFolder().toPath();
+        Path imagesPath = TemporaryStorage.getImagesFolder();
         imagesPath = Path.of(imagesPath.toString(), "/image" + id + type);
         try {
             newFile = Files.copy(oldPath, imagesPath, StandardCopyOption.REPLACE_EXISTING).toFile();
@@ -109,24 +91,5 @@ public class ImageFile {
     
     public void updateFile(File file){
         this.file = file;
-    }
-    
-    public static File getImagesFolder(){
-        if(tempPath == null){
-            initializeTempPath();
-        }
-        return tempPath.toFile();
-    }
-    
-    public static void clearCache(File folder){
-        try{
-            for(File file:folder.listFiles()){
-                Files.delete(file.toPath());
-            }
-        }
-        catch(IOException ex)
-        {
-            throw new RuntimeException("Could not clear cache", ex);
-        }
     }
 }

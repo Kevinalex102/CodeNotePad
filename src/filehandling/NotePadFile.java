@@ -113,7 +113,7 @@ public class NotePadFile {
     
     private static void saveImages(){
         File newFolder = new File(currFolder, "images");
-        ImageFile.clearCache(newFolder);
+        TemporaryStorage.clearCache();
         try{
             for(ImagePanel imagePanel: EditorPane.images.values()){
                 ImageFile file = imagePanel.getImageFile();

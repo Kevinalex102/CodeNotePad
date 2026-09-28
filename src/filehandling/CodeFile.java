@@ -8,7 +8,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Path;
 
 /**
  *
@@ -18,31 +18,14 @@ public class CodeFile {
     
     private String text;
     private final File file;
-    private static Path tempPath = null;
     
     public CodeFile(String text, int id, String type)
     {
-        if(tempPath == null){
-            initializeTempPath();
-        }
+        Path tempPath = TemporaryStorage.getCodeFilesFolder();
         
         this.file = new File(tempPath + "/code" + id + type);
         this.text = text;
         write();
-    }
-    
-    private static void initializeTempPath(){
-        try{
-            tempPath = Path.of(
-                System.getProperty("java.io.tmpdir"),
-                "CodeNotePad",
-                "codeFiles"
-            );
-            Files.createDirectories(tempPath);
-        }
-        catch(IOException ex){
-            throw new RuntimeException("Could not create temp path", ex);
-        }
     }
     
     private void write(){
@@ -75,23 +58,6 @@ public class CodeFile {
             }
         } else {
             throw new RuntimeException("File format not supported");
-        }
-    }
-    
-    public static void clearCache(){
-        if (tempPath == null){
-            return;
-        }
-        
-        File folder = tempPath.toFile();
-        try{
-            for(File file:folder.listFiles()){
-                Files.delete(file.toPath());
-            }
-        }
-        catch(IOException ex)
-        {
-            throw new RuntimeException("Could not clear cache");
         }
     }
     
