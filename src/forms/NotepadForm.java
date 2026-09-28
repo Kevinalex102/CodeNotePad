@@ -574,7 +574,15 @@ public class NotepadForm extends javax.swing.JFrame {
         return null;
     }
     
-    public void loadTextArea(String text, Color bgColor, Color fgColor, boolean bold, boolean italic, String fontFamily, int fontSize){
+    public void loadTextArea(
+            String text, 
+            Color bgColor, 
+            Color fgColor, 
+            boolean bold, 
+            boolean italic, 
+            String fontFamily, 
+            int fontSize)
+    {
         editorPane.removeAll();
         mainTextArea.setText(text);
         mainTextArea.setBackground(bgColor);

@@ -52,6 +52,7 @@ public class Converter {
         Color bg = component.getBackground();
         Color fg = component.getForeground();
 
+        node.put("type", "CodeArea");
         node.put("text", component.getText());
         node.put("pos_x", component.getX());
         node.put("pos_y", component.getY());
@@ -84,6 +85,7 @@ public class Converter {
     public static ObjectNode toJsonNode(ImagePanel component, boolean copying) {
         ObjectNode node = mapper.createObjectNode();
 
+        node.put("type", "ImagePanel");
         node.put("file", component.getPath());
         node.put("pos_x", component.getX());
         node.put("pos_y", component.getY());
@@ -183,5 +185,14 @@ public class Converter {
         }
     
         return new ImagePanel.Instructions(file, pos_x, pos_y, width, height, layer, locked, id);
+    }
+    
+    public static String getType(String jsonString) {
+        try {
+            JsonNode node = mapper.readTree(jsonString);
+            return node.get("type").asText();
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException("Invalid component JSON", ex);
+        }
     }
 }

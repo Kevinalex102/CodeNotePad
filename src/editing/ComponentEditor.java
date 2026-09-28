@@ -33,18 +33,19 @@ public class ComponentEditor {
         if (clipboard.isDataFlavorAvailable(DataFlavor.stringFlavor)) {
             try {
                 String clipboardData = (String)clipboard.getData(DataFlavor.stringFlavor);
-                if(clipboardData.contains("text")){
-                    CodeArea.Instructions newAreaInstructions = Converter.toCodeArea(clipboardData, true);
-                    container.add(CodeArea.createArea(newAreaInstructions));
+                switch (Converter.getType(clipboardData)) {
+                    case "CodeArea" -> {
+                        CodeArea.Instructions instructions =
+                                Converter.toCodeArea(clipboardData, true);
+                        container.add(CodeArea.createArea(instructions));
+                    }
+                    case "ImagePanel" -> {
+                        ImagePanel.Instructions instructions =
+                                Converter.toImagePanel(clipboardData, true);
+                        container.add(ImagePanel.createPanel(instructions));
+                    }
                 }
-                else if(clipboardData.contains("file")){
-                    ImagePanel.Instructions newImageInstructions = Converter.toImagePanel(clipboardData, true);
-                    container.add(ImagePanel.createPanel(newImageInstructions));
-                }
-                
-            } catch (UnsupportedFlavorException ex) {
-                System.getLogger(CodeArea.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            } catch (IOException ex) {
+            } catch (UnsupportedFlavorException | IOException ex) {
                 System.getLogger(CodeArea.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
             }
         }

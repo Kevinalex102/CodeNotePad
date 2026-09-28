@@ -22,7 +22,8 @@ import java.io.*;
 public class NotePadFile {
     private final static ObjectMapper mapper = new ObjectMapper();
     
-    private File folder;
+    private static final double VERSION = 1.0;
+    private final File folder;
     public static File currFolder = null;
     
     public NotePadFile(File folder){
@@ -54,6 +55,7 @@ public class NotePadFile {
         ObjectNode node = mapper.createObjectNode();
 
         try {
+            node.put("version", VERSION);
             node.set("mainTextArea", textAreaJson);
             node.put("idCounter", EditorPane.getIdCounter());
 
