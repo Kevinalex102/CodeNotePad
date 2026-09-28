@@ -15,6 +15,7 @@ import java.io.File;
 import java.util.*;
 import javax.swing.*;
 import menus.TextMenuItems;
+import com.formdev.flatlaf.*;
 
 /**
  *
@@ -30,11 +31,17 @@ public class NotepadForm extends javax.swing.JFrame {
      */
     public NotepadForm() {
         initComponents();
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         initializeMainTextArea();
         editorPane.setBackgroundComponent(mainTextArea);
         initializeFonts();
         menu = new JPopupMenu();
         initializeMenu();
+        comboBox_theme.addItemListener((ItemEvent ie) -> {
+            if (ie.getStateChange() == ItemEvent.SELECTED){
+                changeTheme();
+            }
+        });
     }
     
     private void initializeMenu(){
@@ -128,6 +135,8 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_textColor = new javax.swing.JButton();
         label_bgColor = new javax.swing.JLabel();
         btn_bgColor = new javax.swing.JButton();
+        comboBox_theme = new javax.swing.JComboBox<>();
+        label_theme = new javax.swing.JLabel();
         panel_insert = new javax.swing.JPanel();
         btn_insertCode = new javax.swing.JButton();
         btn_insertImage = new javax.swing.JButton();
@@ -145,6 +154,8 @@ public class NotepadForm extends javax.swing.JFrame {
                 formWindowClosing(evt);
             }
         });
+
+        mainTabbedPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         checkBox_bold.setText("Negrito");
         checkBox_bold.addActionListener(new java.awt.event.ActionListener() {
@@ -182,6 +193,15 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         });
 
+        comboBox_theme.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Claro", "Escuro" }));
+        comboBox_theme.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                comboBox_themeActionPerformed(evt);
+            }
+        });
+
+        label_theme.setText("Tema");
+
         javax.swing.GroupLayout panel_homeLayout = new javax.swing.GroupLayout(panel_home);
         panel_home.setLayout(panel_homeLayout);
         panel_homeLayout.setHorizontalGroup(
@@ -210,7 +230,11 @@ public class NotepadForm extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(checkBox_bold)
                                 .addGap(0, 0, Short.MAX_VALUE)))))
-                .addContainerGap(489, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 369, Short.MAX_VALUE)
+                .addComponent(label_theme)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(comboBox_theme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panel_homeLayout.setVerticalGroup(
             panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -218,7 +242,9 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_font))
+                    .addComponent(label_font)
+                    .addComponent(comboBox_theme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(label_theme))
                 .addGap(8, 8, 8)
                 .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -258,7 +284,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_insertCode)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_insertImage)
-                .addContainerGap(552, Short.MAX_VALUE))
+                .addContainerGap(542, Short.MAX_VALUE))
         );
         panel_insertLayout.setVerticalGroup(
             panel_insertLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -304,7 +330,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_saveFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_newFile)
-                .addContainerGap(470, Short.MAX_VALUE))
+                .addContainerGap(468, Short.MAX_VALUE))
         );
         panel_fileLayout.setVerticalGroup(
             panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -314,7 +340,7 @@ public class NotepadForm extends javax.swing.JFrame {
                     .addComponent(btn_openFile)
                     .addComponent(btn_saveFile)
                     .addComponent(btn_newFile))
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Arquivo", panel_file);
@@ -331,7 +357,7 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(mainTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 716, Short.MAX_VALUE)
+                    .addComponent(mainTabbedPane)
                     .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -339,8 +365,8 @@ public class NotepadForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(mainTabbedPane, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(editorPane, javax.swing.GroupLayout.DEFAULT_SIZE, 547, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -353,23 +379,13 @@ public class NotepadForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         editorPane.add(CodeArea.createArea());
     }//GEN-LAST:event_btn_insertCodeActionPerformed
-
-    private void checkBox_boldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_boldActionPerformed
-        // TODO add your handling code here:
-        changeFontStyle(Font.BOLD);
-    }//GEN-LAST:event_checkBox_boldActionPerformed
     
-    private void checkBox_italicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_italicActionPerformed
-        // TODO add your handling code here:
-        changeFontStyle(Font.ITALIC);
-    }//GEN-LAST:event_checkBox_italicActionPerformed
-
     private void changeFontStyle(int style) {
         Font currentFont = mainTextArea.getFont();
 
         boolean bold = currentFont.isBold();
         boolean italic = currentFont.isItalic();
-
+        
         switch (style) {
             case 0 -> {
                 bold = false;
@@ -398,27 +414,17 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTextArea.setFont(currentFont.deriveFont(newStyle));
     }
 
-    private void btn_textColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_textColorActionPerformed
-        // TODO add your handling code here:
-        changeForeground();
-    }//GEN-LAST:event_btn_textColorActionPerformed
-
     private void changeForeground(){
         Color newColor = (ColorPicker.pickAColor(mainTextArea.getForeground()));
         mainTextArea.setForeground(newColor);
         btn_textColor.setBackground(newColor);
     }
     
-    private void btn_bgColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bgColorActionPerformed
-        // TODO add your handling code here:
-        changeBackground();
-    }//GEN-LAST:event_btn_bgColorActionPerformed
-
     private void changeBackground(){
-        Color newColor = (ColorPicker.pickAColor(mainTextArea.getBackground()));
+        Color newColor = ColorPicker.pickAColor(mainTextArea.getBackground());
         mainTextArea.setBackground(newColor);
         btn_bgColor.setBackground(newColor);
-    }
+}
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));;
@@ -455,29 +461,46 @@ public class NotepadForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         NotePadFile.load(this, editorPane);
     }//GEN-LAST:event_btn_openFileActionPerformed
+
+    private void btn_bgColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bgColorActionPerformed
+        // TODO add your handling code here:
+        changeBackground();
+    }//GEN-LAST:event_btn_bgColorActionPerformed
+
+    private void btn_textColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_textColorActionPerformed
+        // TODO add your handling code here:
+        changeForeground();
+    }//GEN-LAST:event_btn_textColorActionPerformed
+
+    private void checkBox_italicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_italicActionPerformed
+        // TODO add your handling code here:
+        changeFontStyle(Font.ITALIC);
+    }//GEN-LAST:event_checkBox_italicActionPerformed
+
+    private void checkBox_boldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_boldActionPerformed
+        // TODO add your handling code here:
+        changeFontStyle(Font.BOLD);
+    }//GEN-LAST:event_checkBox_boldActionPerformed
+
+    private void comboBox_themeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_themeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboBox_themeActionPerformed
+    
+    private void changeTheme() {
+        String theme = comboBox_theme.getSelectedItem().toString();
+        switch(theme){
+            case "Claro" -> FlatLightLaf.setup();
+            case "Escuro" -> FlatDarkLaf.setup();
+            default -> throw new IllegalArgumentException("Not supported font");
+        }
+        SwingUtilities.updateComponentTreeUI(this);
+    }
     
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
+        FlatLightLaf.setup();
         java.awt.EventQueue.invokeLater(() -> new NotepadForm().setVisible(true));
     }
     
@@ -574,10 +597,12 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkBox_bold;
     private javax.swing.JCheckBox checkBox_italic;
     private javax.swing.JComboBox<String> comboBox_font;
+    private javax.swing.JComboBox<String> comboBox_theme;
     private components.EditorPane editorPane;
     private javax.swing.JLabel label_bgColor;
     private javax.swing.JLabel label_font;
     private javax.swing.JLabel label_textColor;
+    private javax.swing.JLabel label_theme;
     private javax.swing.JTabbedPane mainTabbedPane;
     private javax.swing.JTextArea mainTextArea;
     private javax.swing.JPanel panel_file;
