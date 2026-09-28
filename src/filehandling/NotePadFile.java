@@ -138,7 +138,8 @@ public class NotePadFile {
             boolean bold = mainTextAreaNode.get("bold").asBoolean();
             boolean italic = mainTextAreaNode.get("italic").asBoolean();
             String font = mainTextAreaNode.get("font").asText();
-            form.loadTextArea(text, bgColor, fgColor, bold, italic, font);
+            int fontSize = mainTextAreaNode.get("fontSize").asInt();
+            form.loadTextArea(text, bgColor, fgColor, bold, italic, font, fontSize);
             
             //IdCounter
             EditorPane.resetHashMaps();

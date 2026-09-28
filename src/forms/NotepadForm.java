@@ -18,6 +18,7 @@ import menus.TextMenuItems;
 import com.formdev.flatlaf.*;
 import components.CodeArea;
 import components.ImagePanel;
+import javax.swing.event.ChangeEvent;
 
 /**
  *
@@ -95,6 +96,9 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         });
         comboBox_font.setSelectedItem("Arial");
+        spinner_fontSize.addChangeListener((ChangeEvent ce) -> {
+            changeFontSize((int) spinner_fontSize.getValue());
+        });
         changeFontFamily();
     }
     
@@ -139,6 +143,7 @@ public class NotepadForm extends javax.swing.JFrame {
         btn_bgColor = new javax.swing.JButton();
         comboBox_theme = new javax.swing.JComboBox<>();
         label_theme = new javax.swing.JLabel();
+        spinner_fontSize = new javax.swing.JSpinner();
         panel_insert = new javax.swing.JPanel();
         btn_insertCode = new javax.swing.JButton();
         btn_insertImage = new javax.swing.JButton();
@@ -204,35 +209,39 @@ public class NotepadForm extends javax.swing.JFrame {
 
         label_theme.setText("Tema");
 
+        spinner_fontSize.setModel(new javax.swing.SpinnerNumberModel(12, 4, 50, 2));
+
         javax.swing.GroupLayout panel_homeLayout = new javax.swing.GroupLayout(panel_home);
         panel_home.setLayout(panel_homeLayout);
         panel_homeLayout.setHorizontalGroup(
             panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel_homeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(panel_homeLayout.createSequentialGroup()
-                        .addComponent(label_font)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panel_homeLayout.createSequentialGroup()
                         .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panel_homeLayout.createSequentialGroup()
                                 .addComponent(label_textColor)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(6, 6, 6))
                             .addComponent(checkBox_italic))
                         .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panel_homeLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(checkBox_bold))
+                            .addGroup(panel_homeLayout.createSequentialGroup()
                                 .addGap(30, 30, 30)
                                 .addComponent(label_bgColor)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panel_homeLayout.createSequentialGroup()
-                                .addGap(18, 18, 18)
-                                .addComponent(checkBox_bold)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 369, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panel_homeLayout.createSequentialGroup()
+                        .addComponent(label_font)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinner_fontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 408, Short.MAX_VALUE)
                 .addComponent(label_theme)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(comboBox_theme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -246,8 +255,9 @@ public class NotepadForm extends javax.swing.JFrame {
                     .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(label_font)
                     .addComponent(comboBox_theme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(label_theme))
-                .addGap(8, 8, 8)
+                    .addComponent(label_theme)
+                    .addComponent(spinner_fontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -286,7 +296,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_insertCode)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_insertImage)
-                .addContainerGap(542, Short.MAX_VALUE))
+                .addContainerGap(631, Short.MAX_VALUE))
         );
         panel_insertLayout.setVerticalGroup(
             panel_insertLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -332,7 +342,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_saveFile)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btn_newFile)
-                .addContainerGap(468, Short.MAX_VALUE))
+                .addContainerGap(557, Short.MAX_VALUE))
         );
         panel_fileLayout.setVerticalGroup(
             panel_fileLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -381,6 +391,13 @@ public class NotepadForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         editorPane.add(CodeArea.createArea());
     }//GEN-LAST:event_btn_insertCodeActionPerformed
+    
+    private void changeFontSize(int size){
+        Font currentFont = mainTextArea.getFont();
+        
+        mainTextArea.setFont(currentFont.deriveFont(currentFont.getStyle(), size));
+        spinner_fontSize.setValue(size);
+    }
     
     private void changeFontStyle(int style) {
         Font currentFont = mainTextArea.getFont();
@@ -557,7 +574,7 @@ public class NotepadForm extends javax.swing.JFrame {
         return null;
     }
     
-    public void loadTextArea(String text, Color bgColor, Color fgColor, boolean bold, boolean italic, String fontFamily){
+    public void loadTextArea(String text, Color bgColor, Color fgColor, boolean bold, boolean italic, String fontFamily, int fontSize){
         editorPane.removeAll();
         mainTextArea.setText(text);
         mainTextArea.setBackground(bgColor);
@@ -567,6 +584,7 @@ public class NotepadForm extends javax.swing.JFrame {
         if(bold)changeFontStyle(Font.BOLD);
         if(italic)changeFontStyle(Font.ITALIC);
         changeFontFamily(fontFamily);
+        changeFontSize(fontSize);
     }
     
     private void loadAvailableFonts(){
@@ -610,5 +628,6 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JPanel panel_file;
     private javax.swing.JPanel panel_home;
     private javax.swing.JPanel panel_insert;
+    private javax.swing.JSpinner spinner_fontSize;
     // End of variables declaration//GEN-END:variables
 }

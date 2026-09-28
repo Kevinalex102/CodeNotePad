@@ -113,6 +113,7 @@ public class Converter {
         node.put("bold", currFont.isBold());
         node.put("italic", currFont.isItalic());
         node.put("font", currFont.getFamily());
+        node.put("fontSize", currFont.getSize());
 
         return node;
     }
