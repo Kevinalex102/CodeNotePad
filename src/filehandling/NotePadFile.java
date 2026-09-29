@@ -14,6 +14,7 @@ import static filehandling.Converter.toJsonNode;
 import forms.NotepadForm;
 import java.awt.Color;
 import java.io.*;
+import java.nio.file.Files;
 
 /**
  *
@@ -89,9 +90,7 @@ public class NotePadFile {
     private static void writeData(String data){
         File jsonFile = new File(currFolder, "data.json");
         try {
-            var writer = new FileWriter(jsonFile, false);
-            writer.write(data);
-            writer.close();
+            Files.writeString(jsonFile.toPath(), data);
         } catch (IOException ex) {
             throw new IllegalArgumentException("Could not write to data.json", ex);
         }
@@ -99,18 +98,11 @@ public class NotePadFile {
     
     private static String readData(){
         File jsonFile = new File(currFolder, "data.json");
-        String data = "";
-        int i;
         try {
-            var reader = new FileReader(jsonFile);
-            while ((i = reader.read()) != -1) {
-                data += (char)i;
-            }
-            reader.close();
+            return Files.readString(jsonFile.toPath());
         } catch (IOException ex){
             throw new IllegalArgumentException("Could not read data.json", ex);
         }
-        return data;
     }
     
     private static void saveImages(){
@@ -129,7 +121,7 @@ public class NotePadFile {
     
     private static void loadFromData(String data, EditorPane editorPane, NotepadForm form){
         try {
-            ObjectNode node = (ObjectNode) new ObjectMapper().readTree(data);
+            ObjectNode node = (ObjectNode) mapper.readTree(data);
             
             //mainTextArea
             JsonNode mainTextAreaNode = node.get("mainTextArea");
@@ -149,7 +141,7 @@ public class NotePadFile {
             //CodeAreas
             ArrayNode codeAreasNode = (ArrayNode) node.get("codeAreas");
             for(JsonNode codeAreaNode: codeAreasNode){
-                String jsonString = new ObjectMapper().writeValueAsString(codeAreaNode);
+                String jsonString = mapper.writeValueAsString(codeAreaNode);
                 CodeArea.Instructions instructions = Converter.toCodeArea(jsonString, false);
                 editorPane.add(CodeArea.createArea(instructions), instructions.layer());
             }
@@ -157,7 +149,7 @@ public class NotePadFile {
             //ImagePanels
             ArrayNode imagesNode = (ArrayNode) node.get("images");
             for(JsonNode imageNode: imagesNode){
-                String jsonString = new ObjectMapper().writeValueAsString(imageNode);
+                String jsonString = mapper.writeValueAsString(imageNode);
                 ImagePanel.Instructions instructions = Converter.toImagePanel(jsonString, false);
                 editorPane.add(ImagePanel.createPanel(instructions), instructions.layer());
             }
