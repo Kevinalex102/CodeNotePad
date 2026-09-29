@@ -70,7 +70,10 @@ public class EditorPane extends JLayeredPane {
     
     @Override
     public void removeAll(){
+        resetHashMaps();
+        
         super.removeAll();
+        
         add(backgroundComponent);
         setBackgroundComponent(backgroundComponent);
         doLayout();
