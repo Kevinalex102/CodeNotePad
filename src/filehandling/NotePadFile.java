@@ -118,7 +118,7 @@ public class NotePadFile {
         try{
             for(ImagePanel imagePanel: EditorPane.images.values()){
                 ImageFile file = imagePanel.getImageFile();
-                file.copyFile(newFolder);
+                file.copyTo(newFolder);
             }
         }
         catch(Exception ex)

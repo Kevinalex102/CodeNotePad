@@ -76,7 +76,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     }
     
     public static ImagePanel createPanel(Instructions instructions){
-        File file = ImageFile.readFile(instructions.file);
+        File file = new File(instructions.file);
         
         ImagePanel newImagePanel;
         if(instructions.id == null){

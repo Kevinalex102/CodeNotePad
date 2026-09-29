@@ -21,31 +21,26 @@ public class ImageFile {
     private File file;
     
     public ImageFile(File file, int id){
-        this.file = ImageFile.copyFile(file, id);
+        this.file = ImageFile.copyToTemporary(file, id);
     }
-    
-    private static String getType(Path path){
-        try {
-            String mimeType = Files.probeContentType(path);
-            if(mimeType != null)
-            {
-                return mimeType.replace("image/", "."); //Returns: ".png", ".jpeg"
-            }
-            else{
-                return null;
-            }
-        } catch (IOException ex) {
-            throw new RuntimeException("Could not get image type", ex);
+        
+    private static String getExtension(Path path) {
+        String name = path.getFileName().toString();
+        int dot = name.lastIndexOf('.');
+
+        if (dot == -1) {
+            throw new IllegalArgumentException("Image has no extension");
         }
+
+        return name.substring(dot);
     }
     
-    public static File copyFile(File oldFile, int id){
+    public static File copyToTemporary(File oldFile, int id){
         File newFile;
         Path oldPath = oldFile.toPath();
-        String type = getType(oldPath);
+        String type = getExtension(oldPath);
         
-        Path imagesPath = TemporaryStorage.getImagesFolder();
-        imagesPath = Path.of(imagesPath.toString(), "/image" + id + type);
+        Path imagesPath = TemporaryStorage.getImagesFolder().resolve("image" + id + type);
         try {
             newFile = Files.copy(oldPath, imagesPath, StandardCopyOption.REPLACE_EXISTING).toFile();
         } catch (IOException ex) {
@@ -55,13 +50,12 @@ public class ImageFile {
         return newFile;
     }
     
-    public File copyFile(File newFolder){
+    public File copyTo(File newFolder){
         File newFile;
         Path oldPath = file.toPath();        
         String name = oldPath.getName(oldPath.getNameCount() - 1).toString();
         
-        Path newPath = newFolder.toPath();
-        newPath = Path.of(newPath.toString(), "/" + name);
+        Path newPath = newFolder.toPath().resolve(name);
         try {
             newFile = Files.copy(oldPath, newPath, StandardCopyOption.REPLACE_EXISTING).toFile();
             this.file = newPath.toFile();
@@ -72,11 +66,11 @@ public class ImageFile {
         return newFile;
     }
     
-    public static File readFile(String filePath){
-        return new File(filePath);
-    }
-    
     public static boolean isImage(File file) {
+        if (file == null || !file.isFile()){
+            return false;
+        }
+        
         try {
             BufferedImage image = ImageIO.read(file);
             return image != null;
@@ -87,9 +81,5 @@ public class ImageFile {
     
     public File getFile(){
         return file;
-    }
-    
-    public void updateFile(File file){
-        this.file = file;
     }
 }
