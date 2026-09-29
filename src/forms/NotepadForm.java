@@ -436,13 +436,13 @@ public class NotepadForm extends javax.swing.JFrame {
     private void changeForeground(){
         Color newColor = ColorPicker.pickAColor();
         mainTextArea.setForeground(newColor);
-        btn_textColor.setBackground(newColor);
+        btn_textColor.setBackground(mainTextArea.getForeground());
     }
     
     private void changeBackground(){
         Color newColor = ColorPicker.pickAColor();
         mainTextArea.setBackground(newColor);
-        btn_bgColor.setBackground(newColor);
+        btn_bgColor.setBackground(mainTextArea.getBackground());
 }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -473,7 +473,7 @@ public class NotepadForm extends javax.swing.JFrame {
         
         new NotePadFile(newFolder);
         TemporaryStorage.clearCache();
-        editorPane.removeAll();
+        loadDefaultTextArea();
     }//GEN-LAST:event_btn_newFileActionPerformed
 
     private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
@@ -574,6 +574,19 @@ public class NotepadForm extends javax.swing.JFrame {
         return null;
     }
     
+    private void loadDefaultTextArea(){
+        editorPane.removeAll();
+        
+        mainTextArea.setText("");
+        mainTextArea.setBackground(Color.WHITE);
+        btn_bgColor.setBackground(mainTextArea.getBackground());
+        mainTextArea.setForeground(Color.BLACK);
+        btn_textColor.setBackground(mainTextArea.getForeground());
+        changeFontFamily("Arial");
+        changeFontStyle(Font.PLAIN);
+        changeFontSize(12);
+    }
+    
     public void loadTextArea(
             String text, 
             Color bgColor, 
@@ -583,7 +596,7 @@ public class NotepadForm extends javax.swing.JFrame {
             String fontFamily, 
             int fontSize)
     {
-        editorPane.removeAll();
+        loadDefaultTextArea();
         mainTextArea.setText(text);
         mainTextArea.setBackground(bgColor);
         btn_bgColor.setBackground(bgColor);
