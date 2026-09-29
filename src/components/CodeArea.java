@@ -24,6 +24,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     private boolean isLocked = false;
     private final ComponentPopupMenu menu;
     private CodeFile textFile = null;
+    private String exportedType;
     
     public record Instructions(
         String text, 
@@ -137,8 +138,9 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     @Override
     public void export(String type) {
         
-        if (textFile == null){
+        if (textFile == null || !type.equals((exportedType))){
             textFile = new CodeFile(this.getText(), this.id, type);
+            exportedType = type;
         }
         else{
             textFile.write(this.getText());
