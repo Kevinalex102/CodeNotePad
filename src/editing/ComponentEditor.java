@@ -46,7 +46,9 @@ public class ComponentEditor {
                     }
                 }
             } catch (UnsupportedFlavorException | IOException ex) {
-                System.getLogger(CodeArea.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+                System.getLogger(ComponentEditor.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+            } catch (IllegalArgumentException ex) {
+                // Clipboard does not contain valid CodeNotePad component data.
             }
         }
     }
@@ -57,12 +59,16 @@ public class ComponentEditor {
     }
     
     public static void deleteComponent(JComponent component) {
-        EditorPane parent = (EditorPane) component.getParent();
-        parent.removeComponent(component);
+        Container parent = component.getParent();
+        if (parent instanceof EditorPane editorPane) {
+            editorPane.removeComponent(component);
+        }
     }
     
     public static void pushup(JComponent component){
-        EditorPane parent = (EditorPane) component.getParent();
-        parent.setPosition(component, 0);
+        Container parent = component.getParent();
+        if (parent instanceof EditorPane editorPane){
+            editorPane.setPosition(component, 0);
+        }
     }    
 }
