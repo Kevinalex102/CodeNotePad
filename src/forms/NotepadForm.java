@@ -34,6 +34,7 @@ public class NotepadForm extends javax.swing.JFrame {
      */
     public NotepadForm() {
         initComponents();
+        TemporaryStorage.clearCache();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         initializeMainTextArea();
         editorPane.setBackgroundComponent(mainTextArea);

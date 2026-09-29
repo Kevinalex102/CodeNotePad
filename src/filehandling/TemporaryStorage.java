@@ -45,7 +45,7 @@ public class TemporaryStorage {
     
     public static void clearCache(){
         if (tempPath == null){
-            return;
+            initializeTempPath();
         }
         try{
             clearDirectory(codeFilesPath);
