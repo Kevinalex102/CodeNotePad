@@ -31,7 +31,7 @@ public class Converter {
                 return toJson(imagePanel, copying);
             }
             default -> {
-                 return "";
+                throw new IllegalArgumentException("Unsupported component type: " + component.getClass().getName());
             }
         }
     }
@@ -46,7 +46,6 @@ public class Converter {
     }
     
     public static ObjectNode toJsonNode(CodeArea component, boolean copying) {
-
         ObjectNode node = mapper.createObjectNode();
         
         Color bg = component.getBackground();
@@ -91,13 +90,13 @@ public class Converter {
         node.put("pos_y", component.getY());
         node.put("width", component.getWidth());
         node.put("height", component.getHeight());
+        
         if(copying){
             node.put("locked", false);
-        }
-        else{
+        } else{
             node.put("locked", component.isLocked());
-            node.put("id", component.getId());
             node.put("layer", component.getLayer());
+            node.put("id", component.getId());
         }
 
         return node;
@@ -121,14 +120,23 @@ public class Converter {
     }
     
     public static CodeArea.Instructions toCodeArea(String jsonString, boolean pasting){
-        JsonNode node;
-        try {
-            node = mapper.readTree(jsonString);
-        } catch (JsonProcessingException ex) {
-            System.getLogger(Converter.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            throw new IllegalArgumentException("Not a Json string", ex);
-        }
+        JsonNode node = parseJson(jsonString);
 
+        requireFields(
+                node,
+                "text",
+                "pos_x",
+                "pos_y",
+                "width",
+                "height",
+                "locked",
+                "bgColor",
+                "fgColor"
+        );
+        if(!pasting){
+            requireFields(node, "id", "layer");
+        }
+        
         String text = node.get("text").asText();
         int pos_x = node.get("pos_x").asInt();
         int pos_y = node.get("pos_y").asInt();
@@ -156,12 +164,19 @@ public class Converter {
     }
     
     public static ImagePanel.Instructions toImagePanel(String jsonString, boolean pasting){
-        JsonNode node;
-        try {
-            node = mapper.readTree(jsonString);
-        } catch (JsonProcessingException ex) {
-            System.getLogger(Converter.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-            throw new IllegalArgumentException("Not a Json string", ex);
+        JsonNode node = parseJson(jsonString);
+        
+        requireFields(
+                node,
+                "file",
+                "pos_x",
+                "pos_y",
+                "width",
+                "height",
+                "locked"
+        );
+        if(!pasting){
+            requireFields(node, "id", "layer");
         }
 
         String file = node.get("file").asText();
@@ -187,12 +202,31 @@ public class Converter {
         return new ImagePanel.Instructions(file, pos_x, pos_y, width, height, layer, locked, id);
     }
     
-    public static String getType(String jsonString) {
+    private static JsonNode parseJson(String jsonString) {
         try {
             JsonNode node = mapper.readTree(jsonString);
-            return node.get("type").asText();
+
+            if (node == null || !node.isObject()) {
+                throw new IllegalArgumentException("Component JSON must be an object");
+            }
+
+            return node;
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException("Invalid component JSON", ex);
         }
+    }
+    
+    private static void requireFields(JsonNode node, String... fields) {
+        for (String field : fields) {
+            if (!node.has(field)) {
+                throw new IllegalArgumentException("Missing required field: " + field);
+            }
+        }
+    }
+
+    public static String getType(String jsonString) {
+        JsonNode node = parseJson(jsonString);
+        requireFields(node,"type");
+        return node.get("type").asText();
     }
 }

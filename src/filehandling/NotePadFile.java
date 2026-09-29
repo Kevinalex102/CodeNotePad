@@ -23,7 +23,7 @@ import java.nio.file.Files;
 public class NotePadFile {
     private final static ObjectMapper mapper = new ObjectMapper();
     
-    private static final double VERSION = 1.0;
+    private static final int VERSION = 1;
     private final File folder;
     public static File currFolder = null;
     
@@ -105,23 +105,18 @@ public class NotePadFile {
         }
     }
     
-    private static void saveImages(){
+    private static void saveImages() {
         File newFolder = new File(currFolder, "images");
-        try{
-            for(ImagePanel imagePanel: EditorPane.images.values()){
-                ImageFile file = imagePanel.getImageFile();
-                file.copyTo(newFolder);
-            }
-        }
-        catch(Exception ex)
-        {
-            throw new IllegalArgumentException("Could not save images", ex);
+
+        for (ImagePanel imagePanel : EditorPane.images.values()) {
+            ImageFile file = imagePanel.getImageFile();
+            file.copyTo(newFolder);
         }
     }
     
     private static void loadFromData(String data, EditorPane editorPane, NotepadForm form){
         try {
-            ObjectNode node = (ObjectNode) mapper.readTree(data);
+            ObjectNode node = parseJson(data);
             
             //mainTextArea
             JsonNode mainTextAreaNode = node.get("mainTextArea");
@@ -171,5 +166,30 @@ public class NotePadFile {
             throw new IllegalArgumentException("Could not create data.json", ex);
         }
         return folder;
+    }
+    
+    private static ObjectNode parseJson(String data) {
+        try {
+            JsonNode node = mapper.readTree(data);
+
+            if (node == null || !node.isObject()) {
+                throw new IllegalArgumentException("Invalid notepad data");
+            }
+            
+            if (!node.has("version")) {
+                throw new IllegalArgumentException("Missing notepad version");
+            }
+
+            int version = node.get("version").asInt();
+
+            if (version != VERSION) {
+                throw new IllegalArgumentException("Unsupported notepad version: " + version);
+            }
+
+            return (ObjectNode) node;
+
+        } catch (JsonProcessingException ex) {
+            throw new IllegalArgumentException("Invalid notepad data", ex);
+        }
     }
 }
