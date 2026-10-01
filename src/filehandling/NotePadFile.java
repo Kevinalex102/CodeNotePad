@@ -24,17 +24,11 @@ public class NotePadFile {
     private final static ObjectMapper mapper = new ObjectMapper();
     
     private static final int VERSION = 1;
-    private final File folder;
     public static File currFolder = null;
-    
-    public NotePadFile(File folder){
-        this.folder = newNotePad(folder);
-        currFolder = this.folder;
-    }
     
     public static void save(NotepadForm form, ObjectNode textAreaJson){
         if (currFolder == null){
-            new NotePadFile(form.createFolder());
+            newNotePad(form.createFolder());
         } 
         
         if(currFolder != null){
@@ -45,7 +39,7 @@ public class NotePadFile {
     }
     
     public static void load(NotepadForm form, EditorPane editorPane){
-        new NotePadFile(form.chooseFolder());
+        newNotePad(form.chooseFolder());
         if (currFolder != null){
             String data = readData();
             loadFromData(data, editorPane, form);
@@ -154,9 +148,9 @@ public class NotePadFile {
         }
     }
     
-    private File newNotePad(File folder){
+    public static void newNotePad(File folder){
         if (folder == null){
-            return null;
+            return;
         }
         new File(folder, "images").mkdirs();
         File data = new File(folder, "data.json");
@@ -165,7 +159,7 @@ public class NotePadFile {
         } catch (IOException ex) {
             throw new IllegalArgumentException("Could not create data.json", ex);
         }
-        return folder;
+        currFolder = folder;
     }
     
     private static ObjectNode parseJson(String data) {

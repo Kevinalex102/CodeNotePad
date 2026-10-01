@@ -25,13 +25,8 @@ import javax.swing.event.ChangeEvent;
  * @author kevin
  */
 public class NotepadForm extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(NotepadForm.class.getName());
     private final JPopupMenu menu;
 
-    /**
-     * Creates new form NotepadForm
-     */
     public NotepadForm() {
         initComponents();
         TemporaryStorage.clearCache();
@@ -202,11 +197,6 @@ public class NotepadForm extends javax.swing.JFrame {
         });
 
         comboBox_theme.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Claro", "Escuro" }));
-        comboBox_theme.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                comboBox_themeActionPerformed(evt);
-            }
-        });
 
         label_theme.setText("Tema");
 
@@ -389,7 +379,6 @@ public class NotepadForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_insertCodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertCodeActionPerformed
-        // TODO add your handling code here:
         editorPane.add(CodeArea.createArea());
     }//GEN-LAST:event_btn_insertCodeActionPerformed
     
@@ -447,8 +436,11 @@ public class NotepadForm extends javax.swing.JFrame {
 }
     
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        if(showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));
-        TemporaryStorage.clearCache();
+        try {
+            if (showSaveDialog()) NotePadFile.save(this, Converter.toJsonNode(mainTextArea));
+        } finally {
+            TemporaryStorage.clearCache();
+        }
     }//GEN-LAST:event_formWindowClosing
 
     private boolean showSaveDialog(){
@@ -458,60 +450,48 @@ public class NotepadForm extends javax.swing.JFrame {
     }
     
     private void btn_insertImageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_insertImageActionPerformed
-        // TODO add your handling code here:
         editorPane.add(ImagePanel.createPanel(chooseImage()));
     }//GEN-LAST:event_btn_insertImageActionPerformed
 
     private void btn_saveFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_saveFileActionPerformed
-        // TODO add your handling code here:
         NotePadFile.save(this, Converter.toJsonNode(mainTextArea));
     }//GEN-LAST:event_btn_saveFileActionPerformed
 
     private void btn_newFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_newFileActionPerformed
-        // TODO add your handling code here:
         File newFolder = createFolder();
         if(newFolder == null) return;
         
-        new NotePadFile(newFolder);
+        NotePadFile.newNotePad(newFolder);
         TemporaryStorage.clearCache();
         loadDefaultTextArea();
     }//GEN-LAST:event_btn_newFileActionPerformed
 
     private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
-        // TODO add your handling code here:
         NotePadFile.load(this, editorPane);
     }//GEN-LAST:event_btn_openFileActionPerformed
 
     private void btn_bgColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_bgColorActionPerformed
-        // TODO add your handling code here:
         changeBackground();
     }//GEN-LAST:event_btn_bgColorActionPerformed
 
     private void btn_textColorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_textColorActionPerformed
-        // TODO add your handling code here:
         changeForeground();
     }//GEN-LAST:event_btn_textColorActionPerformed
 
     private void checkBox_italicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_italicActionPerformed
-        // TODO add your handling code here:
         changeFontStyle(Font.ITALIC);
     }//GEN-LAST:event_checkBox_italicActionPerformed
 
     private void checkBox_boldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_checkBox_boldActionPerformed
-        // TODO add your handling code here:
         changeFontStyle(Font.BOLD);
     }//GEN-LAST:event_checkBox_boldActionPerformed
-
-    private void comboBox_themeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBox_themeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboBox_themeActionPerformed
     
     private void changeTheme() {
         String theme = comboBox_theme.getSelectedItem().toString();
         switch(theme){
             case "Claro" -> FlatLightLaf.setup();
             case "Escuro" -> FlatDarkLaf.setup();
-            default -> throw new IllegalArgumentException("Not supported font");
+            default -> throw new IllegalArgumentException("Not supported theme");
         }
         SwingUtilities.updateComponentTreeUI(this);
     }
@@ -527,7 +507,7 @@ public class NotepadForm extends javax.swing.JFrame {
     public File chooseFolder(){
         JFileChooser chooser;
         chooser = new JFileChooser(); 
-        chooser.setCurrentDirectory(new java.io.File("user.home"));
+        chooser.setCurrentDirectory(javax.swing.filechooser.FileSystemView.getFileSystemView().getDefaultDirectory());
         chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         chooser.setAcceptAllFileFilterUsed(false);
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
@@ -535,9 +515,6 @@ public class NotepadForm extends javax.swing.JFrame {
             if(folder != null){
                 return folder;
             }
-        }
-        else {
-          System.out.println("No Selection ");
         }
         return null;
     }
@@ -547,14 +524,15 @@ public class NotepadForm extends javax.swing.JFrame {
         if(selectedDirectory == null){
             return null;
         }
-        String DirectoryName = JOptionPane.showInputDialog(
+        String directoryName = JOptionPane.showInputDialog(
             null, 
             "Digite o nome da nova pasta:", 
             "Nome da Pasta", 
             JOptionPane.QUESTION_MESSAGE
         );
-        if (DirectoryName != null && !DirectoryName.trim().isEmpty()){
-            File newFolder = new File(selectedDirectory, DirectoryName.trim());
+        if (directoryName != null && !directoryName.trim().isEmpty()){
+            File newFolder = new File(selectedDirectory, directoryName.trim());
+            if (newFolder.exists()) return null;
             return newFolder;
         } 
         return null;
