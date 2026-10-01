@@ -195,6 +195,10 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     public void pushUp() {
         ComponentEditor.pushup(this);
     }
+    
+    public void updateTheme() {
+        SwingUtilities.updateComponentTreeUI(menu);
+    }
 
     public String getPath() {
         return imageFile.getFile().toString();

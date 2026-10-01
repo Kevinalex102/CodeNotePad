@@ -18,6 +18,7 @@ import menus.TextMenuItems;
 import com.formdev.flatlaf.*;
 import components.CodeArea;
 import components.ImagePanel;
+import java.awt.Component;
 import javax.swing.event.ChangeEvent;
 
 /**
@@ -494,6 +495,15 @@ public class NotepadForm extends javax.swing.JFrame {
             default -> throw new IllegalArgumentException("Not supported theme");
         }
         SwingUtilities.updateComponentTreeUI(this);
+        SwingUtilities.updateComponentTreeUI(menu);
+        
+        for(Component component: editorPane.getComponents()){
+            switch (component) {
+                case CodeArea codeArea -> codeArea.updateTheme();
+                case ImagePanel imagePanel -> imagePanel.updateTheme();
+                default -> {}
+            }
+        }
     }
     
     /**

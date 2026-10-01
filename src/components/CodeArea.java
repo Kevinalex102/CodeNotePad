@@ -167,6 +167,10 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         menu.show(this, x, y);
     }
     
+    public void updateTheme() {
+        SwingUtilities.updateComponentTreeUI(menu);
+    }
+    
     public void changeBackground() {
         this.setBackground(ColorPicker.pickAColor());
     }
