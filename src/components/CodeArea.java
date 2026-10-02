@@ -38,7 +38,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
         boolean locked,
         Integer id
         ){}
-
+    
     private CodeArea(){
         super(10, 10);
         

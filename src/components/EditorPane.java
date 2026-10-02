@@ -97,5 +97,4 @@ public class EditorPane extends JLayeredPane {
         codeAreas.clear();
         images.clear();
     }
-    
 }

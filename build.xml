@@ -70,4 +70,15 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="test" depends="compile-test,-pre-test-run">
+        <java
+            classname="org.junit.platform.console.ConsoleLauncher"
+            classpath="${run.test.classpath}"
+            fork="true"
+            failonerror="true">
+
+            <arg value="execute"/>
+            <arg value="--scan-classpath"/>
+        </java>
+    </target>
 </project>

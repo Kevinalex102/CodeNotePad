@@ -21,10 +21,25 @@ import java.nio.file.Files;
  * @author kevin
  */
 public class NotePadFile {
+    
+    record MainTextAreaInstructions( 
+        String text, 
+        Color bgColor, 
+        Color fgColor, 
+        boolean bold, 
+        boolean italic, 
+        String font, 
+        int fontSize 
+        ){}
+    
     private final static ObjectMapper mapper = new ObjectMapper();
     
     private static final int VERSION = 1;
     public static File currFolder = null;
+    
+    @FunctionalInterface interface MainTextAreaLoader{ 
+        void load(MainTextAreaInstructions data); 
+    }
     
     public static void save(NotepadForm form, ObjectNode textAreaJson){
         if (currFolder == null){
@@ -41,8 +56,20 @@ public class NotePadFile {
     public static void load(NotepadForm form, EditorPane editorPane){
         newNotePad(form.chooseFolder());
         if (currFolder != null){
-            String data = readData();
-            loadFromData(data, editorPane, form);
+            String data = readData(); 
+            loadFromData(
+                    data, 
+                    editorPane,
+                    mainTextArea -> form.loadTextArea(
+                            mainTextArea.text(), 
+                            mainTextArea.bgColor(), 
+                            mainTextArea.fgColor(), 
+                            mainTextArea.bold(), 
+                            mainTextArea.italic(),
+                            mainTextArea.font(), 
+                            mainTextArea.fontSize()
+                    )
+            );
         }
     }
     
@@ -108,23 +135,25 @@ public class NotePadFile {
         }
     }
     
-    private static void loadFromData(String data, EditorPane editorPane, NotepadForm form){
+    static void loadFromData(String data, EditorPane editorPane, MainTextAreaLoader mainTextAreaLoader){
         try {
             ObjectNode node = parseJson(data);
             
             //mainTextArea
             JsonNode mainTextAreaNode = node.get("mainTextArea");
-            String text = mainTextAreaNode.get("text").asText();
-            Color bgColor = new Color(mainTextAreaNode.get("bgColor").asInt());
-            Color fgColor = new Color(mainTextAreaNode.get("fgColor").asInt());
-            boolean bold = mainTextAreaNode.get("bold").asBoolean();
-            boolean italic = mainTextAreaNode.get("italic").asBoolean();
-            String font = mainTextAreaNode.get("font").asText();
-            int fontSize = mainTextAreaNode.get("fontSize").asInt();
-            form.loadTextArea(text, bgColor, fgColor, bold, italic, font, fontSize);
+            MainTextAreaInstructions mainTextArea = new MainTextAreaInstructions( 
+                    mainTextAreaNode.get("text").asText(), 
+                    new Color(mainTextAreaNode.get("bgColor").asInt()), 
+                    new Color(mainTextAreaNode.get("fgColor").asInt()), 
+                    mainTextAreaNode.get("bold").asBoolean(), 
+                    mainTextAreaNode.get("italic").asBoolean(), 
+                    mainTextAreaNode.get("font").asText(), 
+                    mainTextAreaNode.get("fontSize").asInt() 
+            );
+            // ensures loadTextArea, which calls editorPane.removeAll(), is called before adding components
+            mainTextAreaLoader.load(mainTextArea);
             
             //IdCounter
-            EditorPane.resetHashMaps();
             EditorPane.setIdCounter(node.get("idCounter").asInt());
             
             //CodeAreas
@@ -142,7 +171,7 @@ public class NotePadFile {
                 ImagePanel.Instructions instructions = Converter.toImagePanel(jsonString, false);
                 editorPane.add(ImagePanel.createPanel(instructions), instructions.layer());
             }
-            
+           
         } catch (JsonProcessingException ex) {
             throw new IllegalArgumentException("Could not load from data", ex);
         }
