@@ -9,10 +9,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import components.*;
-import java.awt.Color;
-import java.awt.Font;
-import javax.swing.JComponent;
-import javax.swing.JTextArea;
+import java.awt.*;
+import javax.swing.*;
 
 /**
  *
@@ -59,12 +57,15 @@ public class Converter {
         node.put("height", component.getHeight());
         node.put("bgColor", bg.getRGB());
         node.put("fgColor", fg.getRGB());
+        
+        JLayeredPane parent = (JLayeredPane)component.getParent();
+        int position = parent.getPosition(component);
 
         if (copying) {
             node.put("locked", false);
         } else {
             node.put("locked", component.isLocked());
-            node.put("layer", component.getLayer());
+            node.put("layer", position);
             node.put("id", component.getId());
         }
 
@@ -91,11 +92,14 @@ public class Converter {
         node.put("width", component.getWidth());
         node.put("height", component.getHeight());
         
+        JLayeredPane parent = (JLayeredPane)component.getParent();
+        int position = parent.getPosition(component);
+        
         if(copying){
             node.put("locked", false);
         } else{
             node.put("locked", component.isLocked());
-            node.put("layer", component.getLayer());
+            node.put("layer", position);
             node.put("id", component.getId());
         }
 
