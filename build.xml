@@ -76,7 +76,9 @@
             classpath="${run.test.classpath}"
             fork="true"
             failonerror="true">
-
+            
+            <jvmarg value="--enable-final-field-mutation=ALL-UNNAMED"/>
+            
             <arg value="execute"/>
             <arg value="--scan-classpath"/>
         </java>

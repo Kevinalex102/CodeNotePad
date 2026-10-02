@@ -23,7 +23,7 @@ public class CodeFile {
     {
         Path tempPath = TemporaryStorage.getCodeFilesFolder();
         
-        this.file = new File(tempPath + "/code" + id + type);
+        this.file = tempPath.resolve("code" + id + type).toFile();
         this.text = text;
         write();
     }
