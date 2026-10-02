@@ -481,6 +481,7 @@ public class NotepadForm extends javax.swing.JFrame {
         NotePadFile.newNotePad(newFolder);
         TemporaryStorage.clearCache();
         loadDefaultTextArea();
+        NotePadFile.save(this, Converter.toJsonNode(mainTextArea));
     }//GEN-LAST:event_btn_newFileActionPerformed
 
     private void btn_openFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_openFileActionPerformed
