@@ -49,7 +49,7 @@ public class NotepadForm extends javax.swing.JFrame {
     
     private void setIcon(){
         try{
-        setIconImage(ImageIO.read(new File("resources/icon.png")));
+        setIconImage(ImageIO.read(getClass().getResource("/resources/icon.png")));
         } catch (IOException ex){
             throw new RuntimeException("Could not load icon", ex);
         }
@@ -514,12 +514,9 @@ public class NotepadForm extends javax.swing.JFrame {
         SwingUtilities.updateComponentTreeUI(this);
         SwingUtilities.updateComponentTreeUI(menu);
         
-        for(Component component: editorPane.getComponents()){
-            switch (component) {
-                case CodeArea codeArea -> codeArea.updateTheme();
-                case ImagePanel imagePanel -> imagePanel.updateTheme();
-                default -> {}
-            }
+        for (Component component : editorPane.getComponents()) { 
+            if (component instanceof CodeArea codeArea) { codeArea.updateTheme(); } 
+            else if (component instanceof ImagePanel imagePanel) { imagePanel.updateTheme(); } 
         }
     }
     

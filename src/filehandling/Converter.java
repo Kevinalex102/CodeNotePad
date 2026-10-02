@@ -21,17 +21,17 @@ public class Converter {
     private final static ObjectMapper mapper = new ObjectMapper();
     
     public static String toJson(JComponent component, boolean copying){
-        switch (component) {
-            case CodeArea codeArea -> {
-                return toJson(codeArea, copying);
-            }
-            case ImagePanel imagePanel -> {
-                return toJson(imagePanel, copying);
-            }
-            default -> {
-                throw new IllegalArgumentException("Unsupported component type: " + component.getClass().getName());
-            }
+        if (component instanceof CodeArea codeArea) {
+            return toJson(codeArea, copying);
         }
+
+        if (component instanceof ImagePanel imagePanel) {
+            return toJson(imagePanel, copying);
+        }
+
+        throw new IllegalArgumentException(
+            "Unsupported component type: " + component.getClass().getName()
+        );
     }
     
     public static String toJson(CodeArea component, boolean copying) {
