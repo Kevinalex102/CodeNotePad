@@ -19,6 +19,8 @@ import com.formdev.flatlaf.*;
 import components.CodeArea;
 import components.ImagePanel;
 import java.awt.Component;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
 
 /**
@@ -30,6 +32,7 @@ public class NotepadForm extends javax.swing.JFrame {
 
     public NotepadForm() {
         initComponents();
+        setIcon();
         TemporaryStorage.clearCache();
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         initializeMainTextArea();
@@ -42,6 +45,18 @@ public class NotepadForm extends javax.swing.JFrame {
                 changeTheme();
             }
         });
+    }
+    
+    private void setIcon(){
+        try{
+        setIconImage(ImageIO.read(new File("resources/icon.png")));
+        } catch (IOException ex){
+            throw new RuntimeException("Could not load icon", ex);
+        }
+    }
+    
+    private void updateTitle(String title){
+        setTitle("CodeNotePad - " + title);
     }
     
     private void initializeMenu(){
@@ -152,6 +167,7 @@ public class NotepadForm extends javax.swing.JFrame {
         mainTextArea = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("CodeNotePad");
         setMinimumSize(new java.awt.Dimension(400, 400));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -523,6 +539,7 @@ public class NotepadForm extends javax.swing.JFrame {
         if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION) {
             File folder = chooser.getSelectedFile();
             if(folder != null){
+                updateTitle(folder.getName());
                 return folder;
             }
         }
@@ -543,6 +560,7 @@ public class NotepadForm extends javax.swing.JFrame {
         if (directoryName != null && !directoryName.trim().isEmpty()){
             File newFolder = new File(selectedDirectory, directoryName.trim());
             if (newFolder.exists()) return null;
+            updateTitle(directoryName.trim());
             return newFolder;
         } 
         return null;

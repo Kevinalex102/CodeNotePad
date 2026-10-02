@@ -42,6 +42,7 @@ public class SaveDialog extends javax.swing.JDialog {
         btn_cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Salvar?");
         setAlwaysOnTop(true);
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
