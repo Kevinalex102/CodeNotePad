@@ -5,9 +5,9 @@
 package menus;
 
 import actions.ExportActions;
-import components.CodeArea;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
+import localization.Localization;
 
 /**
  *
@@ -15,7 +15,7 @@ import javax.swing.JMenuItem;
  */
 public class ExportMenu extends JMenu{
 
-    public JMenu exportMenu = new JMenu("Exportar para...");
+    public JMenu exportMenu = new JMenu(Localization.get("component.export"));
     
     public ExportMenu(ExportActions component) {
         JMenuItem exportTxt = new JMenuItem(".txt");

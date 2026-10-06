@@ -4,6 +4,8 @@
  */
 package dialogs;
 
+import localization.Localization;
+
 /**
  *
  * @author kevin
@@ -15,8 +17,6 @@ public class SaveDialog extends javax.swing.JDialog {
     public boolean getSave(){
         return save;
     }
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(SaveDialog.class.getName());
 
     /**
      * Creates new form SaveDialog
@@ -26,6 +26,10 @@ public class SaveDialog extends javax.swing.JDialog {
     public SaveDialog(java.awt.Frame parent, boolean modal){
         super(parent, modal);
         initComponents();
+        this.setTitle(Localization.get("save.title"));
+        label_save.setText(Localization.get("save.beforeClosing"));
+        btn_save.setText(Localization.get("dialog.yes"));
+        btn_cancel.setText(Localization.get("dialog.no"));
     }
 
     /**
@@ -42,21 +46,20 @@ public class SaveDialog extends javax.swing.JDialog {
         btn_cancel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Salvar?");
         setAlwaysOnTop(true);
         setResizable(false);
         setType(java.awt.Window.Type.POPUP);
 
         label_save.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        label_save.setText("Deseja salvar antes de fechar?");
+        label_save.setText("Would you like to save before closing?");
         label_save.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         label_save.setName(""); // NOI18N
 
-        btn_save.setText("Sim");
+        btn_save.setText("Yes");
         btn_save.setPreferredSize(new java.awt.Dimension(75, 30));
         btn_save.addActionListener(this::btn_saveActionPerformed);
 
-        btn_cancel.setText("Não");
+        btn_cancel.setText("No");
         btn_cancel.setPreferredSize(new java.awt.Dimension(75, 30));
         btn_cancel.addActionListener(this::btn_cancelActionPerformed);
 
@@ -104,22 +107,6 @@ public class SaveDialog extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -7,6 +7,7 @@ package menus;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.text.JTextComponent;
+import localization.Localization;
 
 /**
  *
@@ -16,10 +17,10 @@ public class TextMenuItems{
     
     public static void addTo(JPopupMenu menu, JTextComponent component) {
 
-        JMenuItem selectText = new JMenuItem("Selecionar tudo");
-        JMenuItem cutText = new JMenuItem("Recortar texto");
-        JMenuItem copyText = new JMenuItem("Copiar texto");
-        JMenuItem pasteText = new JMenuItem("Colar texto");
+        JMenuItem selectText = new JMenuItem(Localization.get("text.select"));
+        JMenuItem cutText = new JMenuItem(Localization.get("text.cut"));
+        JMenuItem copyText = new JMenuItem(Localization.get("text.copy"));
+        JMenuItem pasteText = new JMenuItem(Localization.get("text.paste"));
 
         selectText.addActionListener(e -> component.selectAll());
         cutText.addActionListener(e -> component.cut());

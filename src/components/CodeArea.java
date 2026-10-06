@@ -13,6 +13,7 @@ import actions.*;
 import editing.ComponentEditor;
 import menus.*;
 import javax.swing.*;
+import localization.Localization;
 
 /**
  *
@@ -22,7 +23,7 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
 
     private final int id;
     private boolean isLocked = false;
-    private final ComponentPopupMenu menu;
+    private ComponentPopupMenu menu;
     private CodeFile textFile = null;
     private String exportedType;
     
@@ -63,8 +64,8 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     }
     
     private void initializeMenu(){
-        JMenuItem changeBackground = new JMenuItem("Mudar cor do fundo");
-        JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
+        JMenuItem changeBackground = new JMenuItem(Localization.get("notepad.bgColor"));
+        JMenuItem changeForeground = new JMenuItem(Localization.get("notepad.fgColor"));
         changeBackground.addActionListener(e -> changeBackground());
         changeForeground.addActionListener(e -> changeForeground());
         
@@ -169,6 +170,11 @@ public class CodeArea extends JTextArea implements IDragResizeMouseHandler, Comp
     
     public void updateTheme() {
         SwingUtilities.updateComponentTreeUI(menu);
+    }
+    
+    public void resetMenu(){
+        menu = new ComponentPopupMenu(this);
+        initializeMenu();
     }
     
     public void changeBackground() {

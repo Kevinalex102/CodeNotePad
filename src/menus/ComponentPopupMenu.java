@@ -8,6 +8,7 @@ import javax.swing.JPopupMenu;
 import actions.*;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JMenuItem;
+import localization.Localization;
 
 /**
  *
@@ -17,12 +18,12 @@ public class ComponentPopupMenu extends JPopupMenu{
     
     public ComponentPopupMenu(ComponentActions component)
     {
-        JMenuItem copy = new JMenuItem("Copiar componente");
-        JMenuItem paste = new JMenuItem("Colar componente");
-        JMenuItem cut = new JMenuItem("Recortar componente");
-        JMenuItem delete = new JMenuItem("Excluir componente");
-        JCheckBoxMenuItem lock = new JCheckBoxMenuItem("Travar componente");
-        JMenuItem push = new JMenuItem("Trazer para frente");
+        JMenuItem copy = new JMenuItem(Localization.get("component.copy"));
+        JMenuItem paste = new JMenuItem(Localization.get("component.paste"));
+        JMenuItem cut = new JMenuItem(Localization.get("component.cut"));
+        JMenuItem delete = new JMenuItem(Localization.get("component.delete"));
+        JCheckBoxMenuItem lock = new JCheckBoxMenuItem(Localization.get("component.lock"));
+        JMenuItem push = new JMenuItem(Localization.get("component.push"));
 
         copy.addActionListener(e -> component.copyComponent());
         paste.addActionListener(e -> component.pasteComponent());

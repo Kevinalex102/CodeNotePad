@@ -22,6 +22,7 @@ import java.awt.Component;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.event.ChangeEvent;
+import localization.Localization;
 
 /**
  *
@@ -29,6 +30,7 @@ import javax.swing.event.ChangeEvent;
  */
 public class NotepadForm extends javax.swing.JFrame {
     private final JPopupMenu menu;
+    private boolean updatingThemeItems = false;
 
     public NotepadForm() {
         initComponents();
@@ -39,32 +41,38 @@ public class NotepadForm extends javax.swing.JFrame {
         editorPane.setBackgroundComponent(mainTextArea);
         initializeFonts();
         menu = new JPopupMenu();
-        initializeMenu();
+        changeLanguage();
         comboBox_theme.addItemListener((ItemEvent ie) -> {
             if (ie.getStateChange() == ItemEvent.SELECTED){
                 changeTheme();
+            }
+        });
+        comboBox_language.addItemListener((ItemEvent ie) -> {
+            if (ie.getStateChange() == ItemEvent.SELECTED){
+                changeLanguage();
             }
         });
     }
     
     private void setIcon(){
         try{
-        setIconImage(ImageIO.read(getClass().getResource("/resources/icon.png")));
+            setIconImage(ImageIO.read(getClass().getResource("/resources/icon.png")));
         } catch (IOException ex){
             throw new RuntimeException("Could not load icon", ex);
         }
     }
     
     private void updateTitle(String title){
-        setTitle("CodeNotePad - " + title);
+        if(title == null) setTitle("CodeNotePad");
+        else setTitle("CodeNotePad - " + title);
     }
     
     private void initializeMenu(){
-        JMenuItem changeBackground = new JMenuItem("Mudar cor do fundo");
-        JMenuItem changeForeground = new JMenuItem("Mudar cor do texto");
-        JMenuItem bold = new JMenuItem("Negrito");
-        JMenuItem italic = new JMenuItem("Itálico");
-        JMenuItem paste = new JMenuItem("Colar componente");
+        JMenuItem changeBackground = new JMenuItem(Localization.get("notepad.bgColor"));
+        JMenuItem changeForeground = new JMenuItem(Localization.get("notepad.fgColor"));
+        JMenuItem bold = new JMenuItem(Localization.get("text.bold"));
+        JMenuItem italic = new JMenuItem(Localization.get("text.italic"));
+        JMenuItem paste = new JMenuItem(Localization.get("component.paste"));
         
         changeBackground.addActionListener(e -> changeBackground());
         changeForeground.addActionListener(e -> changeForeground());
@@ -156,6 +164,8 @@ public class NotepadForm extends javax.swing.JFrame {
         comboBox_theme = new javax.swing.JComboBox<>();
         label_theme = new javax.swing.JLabel();
         spinner_fontSize = new javax.swing.JSpinner();
+        comboBox_language = new javax.swing.JComboBox<>();
+        label_language = new javax.swing.JLabel();
         panel_insert = new javax.swing.JPanel();
         btn_insertCode = new javax.swing.JButton();
         btn_insertImage = new javax.swing.JButton();
@@ -177,23 +187,23 @@ public class NotepadForm extends javax.swing.JFrame {
 
         mainTabbedPane.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
-        checkBox_bold.setText("Negrito");
+        checkBox_bold.setText("Bold");
         checkBox_bold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkBox_boldActionPerformed(evt);
             }
         });
 
-        checkBox_italic.setText("Itálico");
+        checkBox_italic.setText("Italic");
         checkBox_italic.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 checkBox_italicActionPerformed(evt);
             }
         });
 
-        label_font.setText("Fonte");
+        label_font.setText("Font");
 
-        label_textColor.setText("Cor do Texto");
+        label_textColor.setText("Text color");
 
         btn_textColor.setBackground(new java.awt.Color(0, 0, 0));
         btn_textColor.setForeground(new java.awt.Color(60, 63, 65));
@@ -203,7 +213,7 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         });
 
-        label_bgColor.setText("Cor do Fundo");
+        label_bgColor.setText("Background color");
 
         btn_bgColor.setBackground(new java.awt.Color(255, 255, 255));
         btn_bgColor.setForeground(new java.awt.Color(60, 63, 65));
@@ -213,11 +223,13 @@ public class NotepadForm extends javax.swing.JFrame {
             }
         });
 
-        comboBox_theme.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Claro", "Escuro" }));
-
-        label_theme.setText("Tema");
+        label_theme.setText("Theme");
 
         spinner_fontSize.setModel(new javax.swing.SpinnerNumberModel(12, 4, 50, 2));
+
+        comboBox_language.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "English", "Português (BR)" }));
+
+        label_language.setText("Language");
 
         javax.swing.GroupLayout panel_homeLayout = new javax.swing.GroupLayout(panel_home);
         panel_home.setLayout(panel_homeLayout);
@@ -226,6 +238,16 @@ public class NotepadForm extends javax.swing.JFrame {
             .addGroup(panel_homeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_homeLayout.createSequentialGroup()
+                        .addComponent(label_font)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spinner_fontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(label_theme)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(comboBox_theme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel_homeLayout.createSequentialGroup()
                         .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(panel_homeLayout.createSequentialGroup()
@@ -242,17 +264,11 @@ public class NotepadForm extends javax.swing.JFrame {
                                 .addGap(30, 30, 30)
                                 .addComponent(label_bgColor)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(panel_homeLayout.createSequentialGroup()
-                        .addComponent(label_font)
+                                .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 390, Short.MAX_VALUE)
+                                .addComponent(label_language)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(comboBox_font, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(spinner_fontSize, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 408, Short.MAX_VALUE)
-                .addComponent(label_theme)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(comboBox_theme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(comboBox_language, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         panel_homeLayout.setVerticalGroup(
@@ -266,29 +282,34 @@ public class NotepadForm extends javax.swing.JFrame {
                     .addComponent(label_theme)
                     .addComponent(spinner_fontSize, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_homeLayout.createSequentialGroup()
+                        .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(btn_textColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_bgColor, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(label_textColor)
+                                .addComponent(label_bgColor)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(checkBox_bold)
+                            .addComponent(checkBox_italic)))
                     .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(label_textColor)
-                        .addComponent(label_bgColor)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel_homeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(checkBox_bold)
-                    .addComponent(checkBox_italic))
+                        .addComponent(comboBox_language, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(label_language)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         mainTabbedPane.addTab("Home", panel_home);
 
-        btn_insertCode.setText("Código");
+        btn_insertCode.setText("Code");
         btn_insertCode.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_insertCodeActionPerformed(evt);
             }
         });
 
-        btn_insertImage.setText("Imagem");
+        btn_insertImage.setText("Image");
         btn_insertImage.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_insertImageActionPerformed(evt);
@@ -304,7 +325,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addComponent(btn_insertCode)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(btn_insertImage)
-                .addContainerGap(631, Short.MAX_VALUE))
+                .addContainerGap(633, Short.MAX_VALUE))
         );
         panel_insertLayout.setVerticalGroup(
             panel_insertLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,23 +337,23 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
-        mainTabbedPane.addTab("Inserir", panel_insert);
+        mainTabbedPane.addTab("Insert", panel_insert);
 
-        btn_openFile.setText("Abrir");
+        btn_openFile.setText("Open");
         btn_openFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_openFileActionPerformed(evt);
             }
         });
 
-        btn_saveFile.setText("Salvar");
+        btn_saveFile.setText("Save");
         btn_saveFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_saveFileActionPerformed(evt);
             }
         });
 
-        btn_newFile.setText("Novo");
+        btn_newFile.setText("New");
         btn_newFile.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_newFileActionPerformed(evt);
@@ -363,7 +384,7 @@ public class NotepadForm extends javax.swing.JFrame {
                 .addContainerGap(51, Short.MAX_VALUE))
         );
 
-        mainTabbedPane.addTab("Arquivo", panel_file);
+        mainTabbedPane.addTab("File", panel_file);
 
         mainTextArea.setColumns(20);
         mainTextArea.setRows(5);
@@ -505,11 +526,14 @@ public class NotepadForm extends javax.swing.JFrame {
     }//GEN-LAST:event_checkBox_boldActionPerformed
     
     private void changeTheme() {
+        if (updatingThemeItems) return;
         String theme = comboBox_theme.getSelectedItem().toString();
-        switch(theme){
-            case "Claro" -> FlatLightLaf.setup();
-            case "Escuro" -> FlatDarkLaf.setup();
-            default -> throw new IllegalArgumentException("Not supported theme");
+        String light = Localization.get("theme.light");
+        String dark = Localization.get("theme.dark");
+        if (theme.equals(light)) {
+            FlatLightLaf.setup();
+        } else if (theme.equals(dark)) {
+            FlatDarkLaf.setup();
         }
         SwingUtilities.updateComponentTreeUI(this);
         SwingUtilities.updateComponentTreeUI(menu);
@@ -518,6 +542,57 @@ public class NotepadForm extends javax.swing.JFrame {
             if (component instanceof CodeArea codeArea) { codeArea.updateTheme(); } 
             else if (component instanceof ImagePanel imagePanel) { imagePanel.updateTheme(); } 
         }
+    }
+    private void resetMenu(){
+        menu.removeAll();
+        initializeMenu();
+    }
+    
+    private void updateThemeItems(){
+        int selectedIndex = comboBox_theme.getSelectedIndex();
+        updatingThemeItems = true;
+
+        try {
+            comboBox_theme.removeAllItems();
+            comboBox_theme.addItem(Localization.get("theme.light"));
+            comboBox_theme.addItem(Localization.get("theme.dark"));
+            
+            if (selectedIndex >= 0) {
+            comboBox_theme.setSelectedIndex(selectedIndex);
+            }
+        } finally {
+            updatingThemeItems = false;
+        }
+    }
+    
+    private void updateTexts(){
+        checkBox_bold.setText(Localization.get("text.bold"));
+        checkBox_italic.setText(Localization.get("text.italic"));
+        label_font.setText(Localization.get("text.font"));
+        label_textColor.setText(Localization.get("notepad.fgColor"));
+        label_bgColor.setText(Localization.get("notepad.bgColor"));
+        label_language.setText(Localization.get("notepad.language"));
+        label_theme.setText(Localization.get("notepad.theme"));
+        btn_insertCode.setText(Localization.get("insert.code"));
+        btn_insertImage.setText(Localization.get("insert.image"));
+        btn_openFile.setText(Localization.get("file.open"));
+        btn_saveFile.setText(Localization.get("file.save"));
+        btn_newFile.setText(Localization.get("file.new"));
+        mainTabbedPane.setTitleAt(1, Localization.get("notepad.insert"));
+        mainTabbedPane.setTitleAt(2, Localization.get("notepad.file"));
+        editorPane.resetMenus();
+        updateThemeItems();
+        resetMenu();
+    }
+    
+    private void changeLanguage(){
+        String language = comboBox_language.getSelectedItem().toString();
+        switch(language){
+            case "English" -> Localization.setLocale(Locale.ENGLISH);
+            case "Português (BR)" -> Localization.setLocale(Locale.of("pt", "BR"));
+            default -> throw new IllegalArgumentException("Unsupported language");
+        }
+        updateTexts();
     }
     
     /**
@@ -643,10 +718,12 @@ public class NotepadForm extends javax.swing.JFrame {
     private javax.swing.JCheckBox checkBox_bold;
     private javax.swing.JCheckBox checkBox_italic;
     private javax.swing.JComboBox<String> comboBox_font;
+    private javax.swing.JComboBox<String> comboBox_language;
     private javax.swing.JComboBox<String> comboBox_theme;
     private components.EditorPane editorPane;
     private javax.swing.JLabel label_bgColor;
     private javax.swing.JLabel label_font;
+    private javax.swing.JLabel label_language;
     private javax.swing.JLabel label_textColor;
     private javax.swing.JLabel label_theme;
     private javax.swing.JTabbedPane mainTabbedPane;

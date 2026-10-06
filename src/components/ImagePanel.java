@@ -27,7 +27,7 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
 
     private final int id;
     private boolean isLocked = false;
-    private final ComponentPopupMenu menu;
+    private ComponentPopupMenu menu;
     private BufferedImage image;
     private ImageFile imageFile;
     
@@ -198,6 +198,10 @@ public class ImagePanel extends JLabel implements IDragResizeMouseHandler, Compo
     
     public void updateTheme() {
         SwingUtilities.updateComponentTreeUI(menu);
+    }
+    
+    public void resetMenu(){
+        menu = new ComponentPopupMenu(this);
     }
 
     public String getPath() {

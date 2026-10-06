@@ -4,6 +4,7 @@
  */
 package components;
 
+import actions.ComponentActions;
 import java.awt.Component;
 import java.util.HashMap;
 import javax.swing.*;
@@ -96,5 +97,16 @@ public class EditorPane extends JLayeredPane {
     public static void resetHashMaps(){
         codeAreas.clear();
         images.clear();
+    }
+    
+    public void resetMenus(){
+        for(Component component : this.getComponents()){
+            if(component instanceof CodeArea codeArea){
+                codeArea.resetMenu();
+            } 
+            else if(component instanceof ImagePanel imagePanel){
+                imagePanel.resetMenu();
+            }
+        }
     }
 }

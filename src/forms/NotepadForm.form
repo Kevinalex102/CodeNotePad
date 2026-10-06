@@ -79,7 +79,18 @@
                   <Group type="102" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Component id="label_font" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="comboBox_font" min="-2" pref="177" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="spinner_fontSize" min="-2" pref="52" max="-2" attributes="0"/>
+                              <EmptySpace max="32767" attributes="0"/>
+                              <Component id="label_theme" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="comboBox_theme" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="1" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="label_textColor" min="-2" max="-2" attributes="0"/>
@@ -99,22 +110,15 @@
                                       <Component id="label_bgColor" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
+                                      <EmptySpace pref="390" max="32767" attributes="0"/>
+                                      <Component id="label_language" min="-2" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="label_font" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="comboBox_font" min="-2" pref="177" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="spinner_fontSize" min="-2" pref="52" max="-2" attributes="0"/>
+                              <Component id="comboBox_language" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="408" max="32767" attributes="0"/>
-                      <Component id="label_theme" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="comboBox_theme" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -130,18 +134,26 @@
                           <Component id="spinner_fontSize" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Component id="btn_textColor" min="-2" pref="16" max="-2" attributes="0"/>
-                          <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="label_textColor" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="label_bgColor" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="1" attributes="0">
+                                  <Component id="btn_textColor" min="-2" pref="16" max="-2" attributes="0"/>
+                                  <Component id="btn_bgColor" min="-2" pref="16" max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="3" attributes="0">
+                                      <Component id="label_textColor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      <Component id="label_bgColor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="checkBox_bold" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="checkBox_italic" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
                           </Group>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="checkBox_bold" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="checkBox_italic" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="comboBox_language" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="label_language" alignment="3" min="-2" max="-2" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
@@ -151,7 +163,7 @@
           <SubComponents>
             <Component class="javax.swing.JCheckBox" name="checkBox_bold">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Negrito"/>
+                <Property name="text" type="java.lang.String" value="Bold"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkBox_boldActionPerformed"/>
@@ -159,7 +171,7 @@
             </Component>
             <Component class="javax.swing.JCheckBox" name="checkBox_italic">
               <Properties>
-                <Property name="text" type="java.lang.String" value="It&#xe1;lico"/>
+                <Property name="text" type="java.lang.String" value="Italic"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="checkBox_italicActionPerformed"/>
@@ -177,12 +189,12 @@
             </Component>
             <Component class="javax.swing.JLabel" name="label_font">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Fonte"/>
+                <Property name="text" type="java.lang.String" value="Font"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="label_textColor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cor do Texto"/>
+                <Property name="text" type="java.lang.String" value="Text color"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btn_textColor">
@@ -200,7 +212,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="label_bgColor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Cor do Fundo"/>
+                <Property name="text" type="java.lang.String" value="Background color"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JButton" name="btn_bgColor">
@@ -219,10 +231,7 @@
             <Component class="javax.swing.JComboBox" name="comboBox_theme">
               <Properties>
                 <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                  <StringArray count="2">
-                    <StringItem index="0" value="Claro"/>
-                    <StringItem index="1" value="Escuro"/>
-                  </StringArray>
+                  <StringArray count="0"/>
                 </Property>
               </Properties>
               <AuxValues>
@@ -231,7 +240,7 @@
             </Component>
             <Component class="javax.swing.JLabel" name="label_theme">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Tema"/>
+                <Property name="text" type="java.lang.String" value="Theme"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JSpinner" name="spinner_fontSize">
@@ -241,13 +250,31 @@
                 </Property>
               </Properties>
             </Component>
+            <Component class="javax.swing.JComboBox" name="comboBox_language">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="2">
+                    <StringItem index="0" value="English"/>
+                    <StringItem index="1" value="Portugu&#xea;s (BR)"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
+            </Component>
+            <Component class="javax.swing.JLabel" name="label_language">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Language"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="panel_insert">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Inserir">
-                <Property name="tabTitle" type="java.lang.String" value="Inserir"/>
+              <JTabbedPaneConstraints tabName="Insert">
+                <Property name="tabTitle" type="java.lang.String" value="Insert"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -260,7 +287,7 @@
                       <Component id="btn_insertCode" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="btn_insertImage" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="631" max="32767" attributes="0"/>
+                      <EmptySpace pref="633" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -280,7 +307,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="btn_insertCode">
               <Properties>
-                <Property name="text" type="java.lang.String" value="C&#xf3;digo"/>
+                <Property name="text" type="java.lang.String" value="Code"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_insertCodeActionPerformed"/>
@@ -288,7 +315,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="btn_insertImage">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Imagem"/>
+                <Property name="text" type="java.lang.String" value="Image"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_insertImageActionPerformed"/>
@@ -299,8 +326,8 @@
         <Container class="javax.swing.JPanel" name="panel_file">
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
-              <JTabbedPaneConstraints tabName="Arquivo">
-                <Property name="tabTitle" type="java.lang.String" value="Arquivo"/>
+              <JTabbedPaneConstraints tabName="File">
+                <Property name="tabTitle" type="java.lang.String" value="File"/>
               </JTabbedPaneConstraints>
             </Constraint>
           </Constraints>
@@ -336,7 +363,7 @@
           <SubComponents>
             <Component class="javax.swing.JButton" name="btn_openFile">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Abrir"/>
+                <Property name="text" type="java.lang.String" value="Open"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_openFileActionPerformed"/>
@@ -344,7 +371,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="btn_saveFile">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Salvar"/>
+                <Property name="text" type="java.lang.String" value="Save"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_saveFileActionPerformed"/>
@@ -352,7 +379,7 @@
             </Component>
             <Component class="javax.swing.JButton" name="btn_newFile">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Novo"/>
+                <Property name="text" type="java.lang.String" value="New"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_newFileActionPerformed"/>
