@@ -585,7 +585,7 @@ public class NotepadForm extends javax.swing.JFrame {
         String language = comboBox_language.getSelectedItem().toString();
         switch(language){
             case "English" -> Localization.setLocale(Locale.ENGLISH);
-            case "Português (BR)" -> Localization.setLocale(Locale.of("pt", "BR"));
+            case "Português (BR)" -> Localization.setLocale(new Locale("pt", "BR"));
             default -> throw new IllegalArgumentException("Unsupported language");
         }
         updateTexts();
